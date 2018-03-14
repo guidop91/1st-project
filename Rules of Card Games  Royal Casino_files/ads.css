@@ -1,0 +1,141 @@
+.adheader {
+	width:100%;
+	display:block;
+	background-color: #E8E6E1;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 0.7em;
+	color: #000;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+	overflow: hidden;
+	border-top:1px solid #FFF;
+}
+.flpm { /* version of float left with percentage margin. */
+	float: left;
+	margin-left: 0.5%;
+	margin-right: 0.5%;
+}
+.frpm {  /* version of float right with percentage margin. */
+	float: right;
+	margin-left: 0.5%;
+	margin-right: 0.5%;
+}
+.toptext {
+	text-align: center;
+	width: 17em;
+	max-width: 46%;
+	vertical-align: top;
+	display: inline-block;
+	padding: 3px;
+	margin: 0px;
+}
+.topban1 {
+	padding 0px 2px; 
+	display: inline-block;
+	font-size: 1.15em;
+	max-width:100%;
+}
+.topban1 a:link, .topban1 a:visited, .topban1 a:link, .topban1 a:visited {
+	font-weight:bold;
+	color: #5B5BFF;
+	font-size: 1.15em;
+}
+.topban1 img {
+	vertical-align: middle;
+}
+.topbanwide {
+	display: inline-block;
+}
+.topbanmid {
+	display: none;
+}
+.topbannarrow {
+	display: none;
+}
+
+.stripewide, .stripemid, .stripenarrow, .stripevar {
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.stripewide, .stripevar {
+	max-width:728px;
+}
+
+.stripemid {
+	max-width:468px;
+}
+
+.stripenarrow {
+	max-width:320px;
+}
+
+@media only screen and (max-width: 1150px) {
+.topbannarrow {
+	display: none;
+}
+.topbanmid {
+	display: inline-block;
+}
+.topbanwide {
+	display: none;
+}
+.stripevar {
+	max-width:468px;
+}	
+}
+
+@media only screen and (max-width: 900px) {
+.topbannarrow {
+	display: inline-block;
+}
+.topbanmid {
+	display: none;
+}
+.topbanwide {
+	display: none;
+}
+.stripevar {
+	max-width:320px;
+}	
+}
+
+.textban {
+	width: 100%;
+	border:1px solid #FFF;
+	padding: 5px;
+}
+
+.foottab {
+	border-collapse:collapse;
+	margin-left:auto;
+	margin-right:auto;
+	text-align: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.foottext a:link, .foottext a:visited, .toptext a:link, .toptext a:visited {
+	font-weight:bold;
+	color: #5B5BFF;
+	font-size: 1.15em;
+} 
+.foottext{
+	text-align: center;
+	vertical-align: top;
+	display: inline-block;
+	border:1px solid #FFF;
+	width:21em;
+	max-width:100%;
+	padding:2px 3px 4px;
+}
+.adfooter {
+	background-color: #E8E6E1;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 0.7em;
+	text-align: center;
+	padding: 0px 0px 3px;
+	width: 100%;
+	overflow: hidden;
+}
