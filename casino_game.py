@@ -1,0 +1,19 @@
+class Deck:
+	def __init__(self):
+		
+		self.cards = []
+
+		self.populate()
+
+	def populate(self):
+
+		symbol = ["Spade","Diamond","Heart","Club"]
+		number = ["Ace",2,3,4,5,6,7,8,9,10,"Jack","Queen","King"]
+
+		for i in symbol:
+			for j in number:
+				self.cards.append([i,j])
+
+		return self.cards
+
+
