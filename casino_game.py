@@ -16,4 +16,15 @@ class Deck:
 
 		return self.cards
 
+class Player():
+	def __init__(self,name):
 
+		self.name = name
+		self.hand = []
+
+class Table():
+	def __init__(self):
+
+		self.in_game = []
+		self.build = []
+	
