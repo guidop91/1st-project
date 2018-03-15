@@ -19,6 +19,9 @@ class Deck:
 
 		return self.cards
 
+	def draw_card(self):
+		return self.cards.pop()
+
 class Player():
 	def __init__(self,name):
 
