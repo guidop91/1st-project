@@ -33,3 +33,9 @@ class Table():
 
 		self.in_game = []
 		self.build = [] #Shows builds for cards in play
+
+	def start_game(self,deck):
+
+		for i in range(0,4):
+			self.in_game.append(deck.draw_card())
+		return self.in_game
