@@ -22,6 +22,11 @@ class Deck:
 	def draw_card(self):
 		return self.cards.pop()
 
+	def deal_player(self,player):
+		for i in range(0,4):
+			player.hand.append(self.draw_card())
+		return player.hand
+
 class Player():
 	def __init__(self,name):
 
@@ -35,7 +40,7 @@ class Table():
 		self.build = [] #Shows builds for cards in play
 
 	def start_game(self,deck):
-
+		#Draw initial cards for game start. 
 		for i in range(0,4):
 			self.in_game.append(deck.draw_card())
 		return self.in_game
