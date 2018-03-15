@@ -1,9 +1,12 @@
+from random import shuffle
+
 class Deck:
 	def __init__(self):
 		
 		self.cards = []
 
 		self.populate()
+		shuffle(self.cards)
 
 	def populate(self):
 
@@ -27,4 +30,3 @@ class Table():
 
 		self.in_game = []
 		self.build = []
-	
