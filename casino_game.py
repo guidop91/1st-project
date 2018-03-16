@@ -28,6 +28,7 @@ class Deck:
 		return player.hand
 
 class Player():
+	has_build = False
 	def __init__(self,name):
 
 		self.name = name
