@@ -15,7 +15,7 @@ class Deck:
 
 		for i in symbol:
 			for j in number:
-				self.cards.append([i,j])
+				self.cards.append(tuple([i,j]))
 
 		return self.cards
 
