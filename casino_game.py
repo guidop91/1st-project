@@ -34,6 +34,17 @@ class Player():
 		self.name = name
 		self.hand = []
 
+	def build(self,table):
+		print(table.in_game)
+		possible = False
+		finished = False
+
+		while not possible and not finished:
+			selection = input("Which card would you like to add to the build? Enter from\
+				1 to %d in the order of the cards shown above, \n 1 being the first and\
+				%d being the last." % (len(table.in_game),len(table.in_game)))
+
+
 class Table():
 	def __init__(self):
 
