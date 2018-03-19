@@ -18,7 +18,12 @@ class Deck:
 		if card == "Ace":
 			control = False
 			while not control:
-				value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
+				value = None
+				value = input("Would you like to have the Ace to be a 1 or a 14? ")
+				if not value:
+					continue
+
+				value = int(value)
 				if value != 14 and value !=1:
 					print("Must enter either 1 or 14")
 				else:
