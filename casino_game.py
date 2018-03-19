@@ -19,7 +19,6 @@ class Deck:
 			control = False
 			while not control:
 				value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
-
 				if value != 14 and value !=1:
 					print("Must enter either 1 or 14")
 				else:
@@ -56,7 +55,43 @@ class Player():
 		self.pack = []
 
 	def build(self,table):
-		
+		possible_builds = []
+		result = []
+		for card1 in self.hand:
+			#This is the card we want to make a build for.
+			card1m = Deck().card_values(card1[1])
+			for card2 in self.hand:
+				#This is the potential card for a build to be made with.
+				print("Building for ", card1)
+				if card1 == card2:
+					continue
+
+				#These only hold the value of the card, Jack -> 11, Queen -> 12, etc.
+				card2m = Deck().card_values(card2[1])
+				result.append(card2)
+
+				for card3 in table.in_game:
+					#These are the cards taken from the table to make the build.
+					card3m = Deck().card_values(card3[1])
+					addition = 0
+
+					for entry in result:
+						addition += Deck().card_values(entry[1])
+
+					if addition + card3m == card1m:
+						result.append(card3)
+						possible_builds.append(result)
+						result = []
+						break
+
+					if addition + card3m < card1m:
+						result.append(card3)
+
+					result = []
+
+		print(possible_builds)
+
+
 
 
 class Table():
