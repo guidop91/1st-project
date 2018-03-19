@@ -8,6 +8,28 @@ class Deck:
 		self.populate()
 		shuffle(self.cards) #Shuffles cards
 
+
+
+	@staticmethod
+	def card_values(card):
+		royalty = {"Jack":11,"Queen":12,"King":13}
+		if isinstance(card,int):
+			return card
+		if card == "Ace":
+			control = False
+			while not control:
+				value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
+
+				if value != 14 and value !=1:
+					print("Must enter either 1 or 14")
+				else:
+					control = True
+			return value
+		else:
+			return royalty[card]
+
+
+
 	def populate(self):
 		#Creates deck of cards
 		symbol = ["Spade","Diamond","Heart","Club"]
@@ -17,19 +39,16 @@ class Deck:
 			for j in number:
 				self.cards.append(tuple([i,j]))
 
-		return self.cards
-
 	def draw_card(self):
 		return self.cards.pop()
 
 	def deal_player(self,player):
 		for i in range(0,4):
 			player.hand.append(self.draw_card())
-		return player.hand
 
 class Player():
 	has_build = False
-	def __init__(self,name):
+	def __init__(self,name=""):
 
 		self.name = name
 		self.hand = []
@@ -50,4 +69,3 @@ class Table():
 		#Draw initial cards for game start. 
 		for i in range(0,4):
 			self.in_game.append(deck.draw_card())
-		return self.in_game
