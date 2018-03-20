@@ -51,50 +51,38 @@ class Deck:
 			player.hand.append(self.draw_card())
 
 class Player():
-	has_build = False
+	
 	def __init__(self,name=""):
 
 		self.name = name
 		self.hand = []
 		self.points = 0
 		self.pack = []
+		self.has_build = False
 
 	def build(self,table):
-		possible_builds = []
 		result = []
-		for card1 in self.hand:
-			#This is the card we want to make a build for.
-			card1m = Deck().card_values(card1[1])
-			for card2 in self.hand:
-				#This is the potential card for a build to be made with.
-				print("Building for ", card1)
-				if card1 == card2:
+		#Entire process
+		while True:
+			#Card to build for
+			while True:
+				print(self.hand)
+				selection = input("Enter (1-%d) the card you want to build for: " % len(self.hand))
+
+				if not selection:
 					continue
 
-				#These only hold the value of the card, Jack -> 11, Queen -> 12, etc.
-				card2m = Deck().card_values(card2[1])
-				result.append(card2)
+				selection = int(selection)
+				if selection > len(self.hand):
+					continue
 
-				for card3 in table.in_game:
-					#These are the cards taken from the table to make the build.
-					card3m = Deck().card_values(card3[1])
-					addition = 0
+				card1 = self.hand[selection-1]
+				card1m = Deck().card_values(card1[1])
+				print("You have selected " , card1)
 
-					for entry in result:
-						addition += Deck().card_values(entry[1])
+				result.append(card1)
 
-					if addition + card3m == card1m:
-						result.append(card3)
-						possible_builds.append(result)
-						result = []
-						break
 
-					if addition + card3m < card1m:
-						result.append(card3)
-
-					result = []
-
-		print(possible_builds)
 
 
 
