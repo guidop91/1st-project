@@ -60,7 +60,10 @@ class Player():
 		self.has_build = False
 
 	def build(self,table):
+		central_card = None
+		central_cardv = None
 		result = []
+		resultv = [] #The v suffix stands for value: Only the value of the card is taken.
 		#Entire process
 		while True:
 			#Card to build for
@@ -68,18 +71,43 @@ class Player():
 				print(self.hand)
 				selection = input("Enter (1-%d) the card you want to build for: " % len(self.hand))
 
+				#Safeguards
 				if not selection:
 					continue
-
 				selection = int(selection)
 				if selection > len(self.hand):
 					continue
 
-				card1 = self.hand[selection-1]
-				card1m = Deck().card_values(card1[1])
-				print("You have selected " , card1)
+				central_card = self.hand[selection-1]
+				central_cardv = Deck().card_values(central_card[1])
+				print("You have selected " , central_card)
 
-				result.append(card1)
+				break
+
+			#Card to play to construct build.
+			while True:
+				print(self.hand)
+				selection = input("Enter (1-%d) the card you want to build with: " % len(self.hand))
+
+				#Safeguards
+				if not selection:
+					continue
+				selection = int(selection)
+				if selection > len(self.hand):
+					continue
+				build_card = self.hand[selection-1]
+				if build_card == central_card:
+					print("Cannot use the same card as the one you are building for.")
+					continue
+
+				build_cardv = Deck().card_values(build_card[1])
+				print("You have selected ", build_card)
+				result.append(build_card)
+				resultv.append(build_cardv)
+
+				break
+
+
 
 
 
