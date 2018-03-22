@@ -8,22 +8,11 @@ class Card:
 		self.suit = suit
 		self.rank = rank
 
-class Deck:
-	def __init__(self):
-		
-		self.cards = []
-
-		self.populate()
-		shuffle(self.cards) #Shuffles cards
-
-
-
-	@staticmethod
-	def card_values(card):
+	def rank_value(self):
 		royalty = {"Jack":11,"Queen":12,"King":13}
-		if isinstance(card,int):
-			return card
-		if card == "Ace":
+		if isinstance(self.rank,int):
+			return self.rank
+		if self.rank == "Ace":
 			while True:
 				try:
 					value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
@@ -37,18 +26,23 @@ class Deck:
 					break
 			return value
 		else:
-			return royalty[card]
+			return royalty[self.rank]
+		
 
+class Deck:
+	def __init__(self):
+		
+		self.cards = []
 
+		self.populate()
+		shuffle(self.cards) #Shuffles cards
 
 	def populate(self):
 		#Creates deck of cards
-		symbol = ["Spade","Diamond","Heart","Club"]
-		number = ["Ace",2,3,4,5,6,7,8,9,10,"Jack","Queen","King"]
 
-		for i in symbol:
-			for j in number:
-				self.cards.append(tuple([i,j]))
+		for i in Card.SUIT:
+			for j in Card.RANK:
+				self.cards.append(Card(i,j))
 
 	def draw_card(self):
 		return self.cards.pop()
