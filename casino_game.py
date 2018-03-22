@@ -156,6 +156,10 @@ class Player():
 						if finish.lower() == 'y':
 							print("Your build is ", Card.show_hand(result))
 							self.has_build = True
+							self.hand.remove(result[0])
+							for unit in result[1:]:
+								table.in_game.remove(unit)
+							print("Your hand: ",Card.show_hand(self.hand),"Cards in table: ",Card.show_hand(table.in_game))
 							return Card.show_hand(result), Card.card_name(central_card)
 
 						if selection.lower() == 'q':
