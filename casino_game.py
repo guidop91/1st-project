@@ -1,7 +1,7 @@
 from random import shuffle
 
 class Card:
-	SUIT = ["Spade","Diamond","Heart","Club"]
+	SUIT = ["Spades","Diamonds","Hearts","Clubs"]
 	RANK = ["Ace",2,3,4,5,6,7,8,9,10,"Jack","Queen","King"]
 
 	def __init__(self,suit,rank):
@@ -27,7 +27,17 @@ class Card:
 			return value
 		else:
 			return royalty[self.rank]
-		
+
+	def card_name(self):
+		return str(self.rank) + " of " + self.suit
+
+	@staticmethod
+	def show_hand(group):
+		representation = []
+		for card in group:
+			representation.append(Card.card_name(card))
+		return representation
+			
 
 class Deck:
 	def __init__(self):
@@ -39,7 +49,6 @@ class Deck:
 
 	def populate(self):
 		#Creates deck of cards
-
 		for i in Card.SUIT:
 			for j in Card.RANK:
 				self.cards.append(Card(i,j))
@@ -74,7 +83,8 @@ class Player():
 			print("You have entered the build function. If at any time you want to get out, enter 'q'.")
 			#Card to build for
 			while True:
-				print(self.hand)
+				print("Your hand: ",Card.show_hand(self.hand))
+				print("Cards in table: ", Card.show_hand(table.in_game))
 				selection = input("Enter (1-%d) the card you want to build for: " % len(self.hand))
 
 				#Safeguards
@@ -88,8 +98,8 @@ class Player():
 					continue
 
 				central_card = self.hand[selection-1]
-				central_cardv = Deck().card_values(central_card[1])
-				print("You have selected " , central_card)
+				central_cardv = Card.rank_value(central_card)
+				print("You have selected %s and its value is %d" % (Card.card_name(central_card),central_cardv))
 
 				break
 
@@ -98,7 +108,7 @@ class Player():
 				if quit:
 					break
 
-				print(self.hand)
+				print(Card.show_hand(self.hand))
 				selection = input("Enter (1-%d) the card you want to build with: " % len(self.hand))
 
 				#Safeguards
@@ -115,13 +125,13 @@ class Player():
 					print("Cannot use the same card as the one you are building for.")
 					continue
 
-				build_cardv = Deck().card_values(build_card[1])
+				build_cardv = Card.rank_value(build_card)
 
 				if build_cardv >= central_cardv:
 					print ("Cannot use card with same or more value than the one you are building for.")
 					continue
 
-				print("You have selected ", build_card)
+				print("You have selected ", Card.card_name(build_card))
 				result.append(build_card)
 				resultv.append(build_cardv)
 
@@ -144,9 +154,9 @@ class Player():
 							continue
 
 						if finish.lower() == 'y':
-							print("Your build is ", result)
+							print("Your build is ", Card.show_hand(result))
 							self.has_build = True
-							return result, central_card
+							return Card.show_hand(result), Card.card_name(central_card)
 
 						if selection.lower() == 'q':
 							quit = True
@@ -172,18 +182,22 @@ class Player():
 					if start_over == True:
 						break
 
-					print("Your build card is: ",  central_card)
-					print(table.in_game)
-					print("Current build: %s. The added value is: %s" % (result,build_sum))
+					print("Your build card is: ",  Card.card_name(central_card))
+					print(Card.show_hand(table.in_game))
+					print("Current build: %s. The added value is: %d" % (Card.show_hand(result),build_sum))
+					
 					selection = input("Select a card (1-%d) from the table to build with. " % len(table.in_game))
 					if not selection:
 						continue
+					if selection.lower() == 'q':
+						quit = True
+						break
 					selection = int(selection)
 					if selection > len(table.in_game):
 						continue
 
 					build_card = table.in_game[selection-1]
-					build_cardv = Deck().card_values(build_card[1])
+					build_cardv = Card.rank_value(build_card)
 
 					if build_card in result:
 						print("Cannot use card more than one time.")
