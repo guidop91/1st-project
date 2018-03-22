@@ -88,6 +88,8 @@ class Player():
 				print("")
 				selection = input("Enter (1-%d) the card you want to build for: " % len(self.hand))
 
+
+
 				#Safeguards
 				if not selection:
 					continue
@@ -97,6 +99,8 @@ class Player():
 				selection = int(selection)
 				if selection > len(self.hand):
 					continue
+
+
 
 				central_card = self.hand[selection-1]
 				central_cardv = Card.rank_value(central_card)
@@ -113,6 +117,8 @@ class Player():
 				print(Card.show_hand(self.hand))
 				selection = input("Enter (1-%d) the card you want to build with: " % len(self.hand))
 
+
+
 				#Safeguards
 				if not selection:
 					continue
@@ -125,6 +131,7 @@ class Player():
 				selection = int(selection)
 				if selection > len(self.hand):
 					continue
+
 
 
 				build_card = self.hand[selection-1]
@@ -184,6 +191,10 @@ class Player():
 					print("Current build: %s. The added value is: %d" % (Card.show_hand(result),build_sum))
 					
 					selection = input("Select a card (1-%d) from the table to build with. " % len(table.in_game))
+					
+
+
+					#Safeguards
 					if not selection:
 						continue
 					if selection.lower() == 'q':
@@ -195,6 +206,9 @@ class Player():
 					selection = int(selection)
 					if selection > len(table.in_game):
 						continue
+
+
+
 
 					build_card = table.in_game[selection-1]
 					build_cardv = Card.rank_value(build_card)
@@ -222,8 +236,51 @@ class Player():
 			if start_over:
 				continue
 
-	def trail(self):
-		pass
+	def trail(self,table):
+		print("You have entered the trail function. If at any time you want to get out, enter 'q'.\n")
+		while True:
+
+			print(Card.show_hand(self.hand))
+			selection = input("Enter (1-%d) the card you want leave on the table: " % len(self.hand))
+			print("")
+
+			if not selection:
+				continue
+			if selection.lower() == "q":
+				break
+			
+			try:
+				selection = int(selection)
+			except ValueError:
+				continue
+
+			if selection > len(self.hand):
+				continue
+			if selection <= 0:
+				continue
+
+			trail_card = self.hand[selection-1]
+
+			print("You have selected %s. " % Card.card_name(trail_card))
+
+			selection2 = input("Are you sure? Enter \"y\" to proceed. ")
+
+			if not selection2:
+				continue
+			elif selection2.lower() == "q":
+				break
+			elif selection2.lower() == 'y':
+				table.in_game.append(trail_card)
+				self.hand.remove(trail_card)
+
+				print(Card.show_hand(self.hand))
+				print(Card.show_hand(table.in_game))
+				break
+			else:
+				continue
+
+
+
 	
 
 class Table():
