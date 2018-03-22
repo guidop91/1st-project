@@ -216,10 +216,15 @@ class Player():
 					break
 				if quit:
 					break
+
 			if quit:
 				break
 			if start_over:
 				continue
+
+	def trail(self):
+		pass
+	
 
 class Table():
 	def __init__(self):
