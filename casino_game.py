@@ -9,7 +9,7 @@ class Card:
 		self.rank = rank
 
 	def rank_value(self):
-		royalty = {"Jack":11,"Queen":12,"King":13}
+		ROYALTY = {"Jack":11,"Queen":12,"King":13}
 		if isinstance(self.rank,int):
 			return self.rank
 		if self.rank == "Ace":
@@ -26,7 +26,7 @@ class Card:
 					break
 			return value
 		else:
-			return royalty[self.rank]
+			return ROYALTY[self.rank]
 
 	def card_name(self):
 		return str(self.rank) + " of " + self.suit
@@ -80,11 +80,12 @@ class Player():
 			resultv = [] #The v suffix stands for value: Only the value of the card is taken.
 			quit = False
 
-			print("You have entered the build function. If at any time you want to get out, enter 'q'.")
+			print("You have entered the build function. If at any time you want to get out, enter 'q'.\n")
 			#Card to build for
 			while True:
 				print("Your hand: ",Card.show_hand(self.hand))
 				print("Cards in table: ", Card.show_hand(table.in_game))
+				print("")
 				selection = input("Enter (1-%d) the card you want to build for: " % len(self.hand))
 
 				#Safeguards
@@ -100,7 +101,7 @@ class Player():
 				central_card = self.hand[selection-1]
 				central_cardv = Card.rank_value(central_card)
 				print("You have selected %s and its value is %d" % (Card.card_name(central_card),central_cardv))
-
+				print("")
 				break
 
 			#Card to play to construct build.
@@ -108,6 +109,7 @@ class Player():
 				if quit:
 					break
 
+				print("If you want to start over, enter 'x'.")
 				print(Card.show_hand(self.hand))
 				selection = input("Enter (1-%d) the card you want to build with: " % len(self.hand))
 
@@ -117,9 +119,14 @@ class Player():
 				if selection.lower() == 'q':
 					quit = True
 					break
+				if selection.lower() == 'x':
+					start_over = True
+					break
 				selection = int(selection)
 				if selection > len(self.hand):
 					continue
+
+
 				build_card = self.hand[selection-1]
 				if build_card == central_card:
 					print("Cannot use the same card as the one you are building for.")
@@ -141,6 +148,8 @@ class Player():
 			while True:
 				if quit:
 					break
+				if start_over:
+					break
 
 				build_sum = 0
 				for i in resultv:
@@ -148,7 +157,7 @@ class Player():
 
 				while True:
 					if build_sum == central_cardv:
-						finish = input("You have a valid build! Do you want to choose it? Enter \"y\" for YES, \"n\" for NO. ")
+						finish = input("You have a valid build! Do you want to choose it? Enter \"y\" for YES, \"x\" to start over, \"q\" to quit. ")
 
 						if not finish:
 							continue
@@ -162,30 +171,14 @@ class Player():
 							print("Your hand: ",Card.show_hand(self.hand),"Cards in table: ",Card.show_hand(table.in_game))
 							return Card.show_hand(result), Card.card_name(central_card)
 
-						if selection.lower() == 'q':
+						if finish.lower() == 'q':
 							quit = True
 							break
 
-						if finish.lower() == 'n':
-							while True:
-								start_over = input("Would you like to start the build from scratch? Enter \"y\" for YES, \"n\" for NO. ")
-								if not start_over:
-									continue
-
-								if start_over.lower() == 'y':
-									start_over = True
-									break
-
-								if selection.lower() == 'q':
-									quit = True
-									break
-
-								else:
-									continue
+						if finish.lower() == 'x':
+							start_over = True
+							break
 					
-					if start_over == True:
-						break
-
 					print("Your build card is: ",  Card.card_name(central_card))
 					print(Card.show_hand(table.in_game))
 					print("Current build: %s. The added value is: %d" % (Card.show_hand(result),build_sum))
@@ -195,6 +188,9 @@ class Player():
 						continue
 					if selection.lower() == 'q':
 						quit = True
+						break
+					if selection.lower() == 'x':
+						start_over = True
 						break
 					selection = int(selection)
 					if selection > len(table.in_game):
@@ -221,7 +217,9 @@ class Player():
 				if quit:
 					break
 			if quit:
-					break
+				break
+			if start_over:
+				continue
 
 class Table():
 	def __init__(self):
