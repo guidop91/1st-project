@@ -96,7 +96,12 @@ class Player():
 				if selection.lower() == 'q':
 					quit = True
 					break
-				selection = int(selection)
+				try:
+					selection = int(selection)
+				except ValueError:
+					continue
+				if selection <= 0:
+					continue
 				if selection > len(self.hand):
 					continue
 
@@ -128,8 +133,14 @@ class Player():
 				if selection.lower() == 'x':
 					start_over = True
 					break
-				selection = int(selection)
+				try:
+					selection = int(selection)
+				except ValueError:
+					continue
+				
 				if selection > len(self.hand):
+					continue
+				if selection <= 0:
 					continue
 
 
@@ -169,7 +180,7 @@ class Player():
 						if not finish:
 							continue
 
-						if finish.lower() == 'y':
+						elif finish.lower() == 'y':
 							print("Your build is ", Card.show_hand(result))
 							self.has_build = True
 							self.hand.remove(result[0])
@@ -178,13 +189,16 @@ class Player():
 							print("Your hand: ",Card.show_hand(self.hand),"Cards in table: ",Card.show_hand(table.in_game))
 							return Card.show_hand(result), Card.card_name(central_card)
 
-						if finish.lower() == 'q':
+						elif finish.lower() == 'q':
 							quit = True
 							break
 
-						if finish.lower() == 'x':
+						elif finish.lower() == 'x':
 							start_over = True
 							break
+
+						else:
+							continue
 					
 					print("Your build card is: ",  Card.card_name(central_card))
 					print(Card.show_hand(table.in_game))
@@ -203,8 +217,14 @@ class Player():
 					if selection.lower() == 'x':
 						start_over = True
 						break
-					selection = int(selection)
+					try:
+						selection = int(selection)
+					except ValueError:
+						continue
+
 					if selection > len(table.in_game):
+						continue
+					if selection <= 0:
 						continue
 
 
