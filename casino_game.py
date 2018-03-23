@@ -1,4 +1,5 @@
 from random import shuffle
+import itertools
 
 class Card:
 	SUIT = ["Spades","Diamonds","Hearts","Clubs"]
@@ -300,8 +301,28 @@ class Player():
 				continue
 
 	def capture(self,table):
-		pass
+		print("You have entered the capture function. If at any time you want to get out, enter 'q'.\n")
 
+
+	def all_comb(self,table):
+		"""Gets all the possible combinations for one player card and all the table's cards"""
+		all_comb = []
+		for L in range(1,len(table.in_game)+1):
+			all_comb.append(itertools.combinations(table.in_game,L))
+
+		result = []
+		for e in all_comb:
+			for value in e:
+				result.append(list(value))
+
+		result2 = []
+		for group in result:
+			for card in self.hand:
+				group.append(card)
+				result2.append(tuple(group))
+				group.remove(card)
+
+		return result2
 	
 
 class Table():
