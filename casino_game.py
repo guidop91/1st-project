@@ -9,13 +9,13 @@ class Card:
 		self.suit = suit
 		self.rank = rank
 
-	def rank_value(self,building = False):
+	def rank_value(self,acevalue = None):
 		ROYALTY = {"Jack":11,"Queen":12,"King":13}
 		if isinstance(self.rank,int):
 			return self.rank
 		if self.rank == "Ace":
-			if building == True:
-				value = 1
+			if acevalue:
+				value = acevalue
 			while True:
 				try:
 					value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
@@ -325,6 +325,11 @@ class Player():
 				group.remove(card)
 
 		return result2
+
+
+
+
+
 	
 
 class Table():
