@@ -16,17 +16,18 @@ class Card:
 		if self.rank == "Ace":
 			if acevalue:
 				value = acevalue
-			while True:
-				try:
-					value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
-				except ValueError:
-					print("Not a valid number.")
-					continue
+			else:
+				while True:
+					try:
+						value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
+					except ValueError:
+						print("Not a valid number.")
+						continue
 
-				if value != 14 and value !=1:
-					print("Must enter either 1 or 14")
-				else:
-					break
+					if value != 14 and value !=1:
+						print("Must enter either 1 or 14")
+					else:
+						break
 			return value
 		else:
 			return ROYALTY[self.rank]
@@ -326,10 +327,23 @@ class Player():
 
 		return result2
 
+	def build2(self,table):
 
+		combs = self.all_comb(table)
+		possible_combs = []
 
+		for e in self.hand:
+			for group in combs:
+				build_sum = 0
+				if e not in group:
+					for unit in group:
+						build_sum += Card.rank_value(unit,1)
+					if build_sum == Card.rank_value(e,14):
+						if group not in possible_combs:
+							possible_combs.append([group,e])
 
-
+		for i in possible_combs:
+			print(Card.show_hand(i[0]),Card.card_name(i[1]))
 	
 
 class Table():
