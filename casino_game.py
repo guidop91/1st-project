@@ -9,11 +9,13 @@ class Card:
 		self.suit = suit
 		self.rank = rank
 
-	def rank_value(self):
+	def rank_value(self,building = False):
 		ROYALTY = {"Jack":11,"Queen":12,"King":13}
 		if isinstance(self.rank,int):
 			return self.rank
 		if self.rank == "Ace":
+			if building == True:
+				value = 1
 			while True:
 				try:
 					value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
