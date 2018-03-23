@@ -181,7 +181,7 @@ class Player():
 							continue
 
 						elif finish.lower() == 'y':
-							print("Your build is ", Card.show_hand(result))
+							print("Your build is %s for the card %s" % (Card.show_hand(result),Card.card_name(central_card)))
 							self.has_build = True
 							self.hand.remove(result[0])
 							for unit in result[1:]:
@@ -299,7 +299,8 @@ class Player():
 			else:
 				continue
 
-
+	def capture(self,table):
+		pass
 
 	
 
