@@ -71,7 +71,7 @@ class Player():
 		self.name = name
 		self.hand = []
 		self.points = 0
-		self.pack = []
+		self.pack = PlayerPack()
 		self.has_build = False
 
 	def build(self,table):
