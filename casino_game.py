@@ -346,7 +346,7 @@ class Player():
 			print(Card.show_hand(i[0]),Card.card_name(i[1]))
 
 class PlayerPack():
-	def __init__(self,player):
+	def __init__(self):
 		self.pack = []
 		self.sweep = 0
 		self.aces = 0
