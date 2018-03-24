@@ -344,7 +344,41 @@ class Player():
 
 		for i in possible_combs:
 			print(Card.show_hand(i[0]),Card.card_name(i[1]))
-	
+
+class PlayerPack():
+	def __init__(self,player):
+		self.pack = []
+		self.sweep = 0
+		self.aces = 0
+		self.spades = 0
+		self.has_ten_diamonds = False
+		self.has_two_spades = False
+
+	def card_qty(self):
+		return len(self.pack)
+
+	def aces_qty(self):
+		for card in self.pack:
+			if card.rank == "Ace":
+				self.aces += 1
+
+	def spades_qty(self):
+		for card in self.pack:
+			if card.suit == "Spades":
+				self.spades += 1
+
+	def own_ten_diamonds(self):
+		for card in self.pack:
+			if card_name(card) == "10 of Diamonds":
+				self.has_ten_diamonds = True
+				break
+
+	def own_two_spades(self):
+		for card in self.pack:
+			if card_name(card) == "2 of Spades":
+				self.has_two_spades = True
+				break
+
 
 class Table():
 	def __init__(self):
