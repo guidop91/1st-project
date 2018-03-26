@@ -307,6 +307,7 @@ class Player():
 		print("You have entered the capture function. If at any time you want to get out, enter 'q'.\n")
 
 
+
 	def all_comb(self,table):
 		"""Gets all the possible combinations for one player card and all the table's cards"""
 		all_comb = []
@@ -326,6 +327,17 @@ class Player():
 				group.remove(card)
 
 		return result2
+
+	def all_comb2(self,table):
+		"""Gets all the possible combinations for all the table's cards"""
+		all_comb = []
+		for L in range(1,len(table.in_game)+1):
+			all_comb.append(itertools.combinations(table.in_game,L))
+
+		result = []
+		for e in all_comb:
+			for value in e:
+				result.append(list(value))
 
 	def build2(self,table):
 
