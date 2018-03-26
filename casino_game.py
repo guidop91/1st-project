@@ -305,6 +305,79 @@ class Player():
 
 	def capture(self,table):
 		print("You have entered the capture function. If at any time you want to get out, enter 'q'.\n")
+		tab_combs = self.all_comb2(table)
+		possible_cap = []
+
+		#Make sure aces are included for single capture
+		for card in self.hand:
+			card_value = Card.rank_value(card,14)
+			for group in tab_combs:
+				if len(group)>1:
+					continue
+				for unit in group:
+					if Card.rank_value(unit,14) == card_value:
+						possible_cap.append([group,card])
+
+		#Only for captures of more than 1 card.
+		for card in self.hand:
+			card_value = Card.rank_value(card,14)
+			for group in tab_combs:
+				if len(group) == 1:
+					continue
+				added_value = 0
+				for unit in group:
+					added_value += Card.rank_value(unit,1)
+				if card_value == added_value:
+					possible_cap.append([group,card])
+
+		for obj in possible_cap:
+			print(Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]))
+
+		while True:
+
+			if not possible_cap:
+				print("There are no possible captures.")
+				break
+			elif len(possible_cap) == 1:
+				print("Only 1 possible capture.")
+				selection = 1
+			else:
+				selection = input("Select (1-%d) the capture you want to make: " % len(possible_cap))
+
+			if selection == 'q':
+				break
+
+			if not selection:
+				continue
+
+			try:
+				selection = int(selection)
+			except ValueError:
+				continue
+
+			if selection > len(possible_cap) or selection <= 0:
+				print("Number must be between 1 and %d." % len(possible_cap))
+				continue
+
+			cap_obj = possible_cap[selection-1]
+
+			print("You have selected: ")
+			print(Card.show_hand(cap_obj[0]),"with " + Card.card_name(cap_obj[1]))
+
+			confirm = input("Enter 'y' to confirm selection: ")
+
+			if confirm == 'y':
+				for i in cap_obj[0]:
+					self.pack.pack.append(i)
+					table.in_game.remove(i)
+				self.pack.pack.append(cap_obj[1])
+				self.hand.remove(cap_obj[1])
+			else:
+				continue
+
+			print("Capture successfully made!")
+
+			break
 
 
 
@@ -338,6 +411,8 @@ class Player():
 		for e in all_comb:
 			for value in e:
 				result.append(list(value))
+
+		return result
 
 	def build2(self,table):
 
