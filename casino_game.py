@@ -482,6 +482,7 @@ class Player():
 class PlayerPack():
 	def __init__(self):
 		self.pack = []
+		self.card_qty = 0
 		self.sweep = 0
 		self.aces = 0
 		self.spades = 0
@@ -513,6 +514,12 @@ class PlayerPack():
 				self.has_two_spades = True
 				break
 
+	def get_score(self):
+		self.card_qty = self.card_qty()
+		self.aces = self.aces_qty()
+		self.spades = self.spades_qty()
+		self.has_ten_diamonds = self.own_ten_diamonds()
+		self.has_two_spades = self.own_two_spades()
 
 
 class Table():
