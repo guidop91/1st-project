@@ -8,6 +8,8 @@ class Card:
 	def __init__(self,suit,rank):
 		self.suit = suit
 		self.rank = rank
+		self.for_build = False
+
 
 	def rank_value(self,acevalue = None):
 		ROYALTY = {"Jack":11,"Queen":12,"King":13}
@@ -187,6 +189,7 @@ class Player():
 						elif finish.lower() == 'y':
 							print("Your build is %s for the card %s" % (Card.show_hand(result),Card.card_name(central_card)))
 							self.has_build = True
+							central_card.for_build = True
 							self.hand.remove(result[0])
 							for unit in result[1:]:
 								table.in_game.remove(unit)
@@ -479,6 +482,7 @@ class Player():
 				continue
 
 			print("Build successfully made!")
+			sel_build[1].for_build = True
 			self.has_build = True
 			break
 
