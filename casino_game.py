@@ -453,8 +453,8 @@ class Player():
 			else:
 				selection = input("Select (1-%d) the build you want to make: " % len(possible_combs))
 
-			if selection.lower() == 'q':
-				break
+				if selection.lower() == 'q':
+					break
 
 			try:
 				selection = int(selection)
@@ -471,9 +471,10 @@ class Player():
 
 			confirm = input("Enter 'y' to confirm selection.")
 
+			result = []
 			if confirm.lower() == 'y':
 				for i in sel_build[0]:
-					table.build.append(i)
+					result.append(i)
 					if i in table.in_game:
 						table.in_game.remove(i)
 					if i in self.hand:
@@ -481,6 +482,7 @@ class Player():
 			else:
 				continue
 
+			table.build.append(result)
 			print("Build successfully made!")
 			sel_build[1].for_build = True
 			self.has_build = True
