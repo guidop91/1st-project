@@ -191,7 +191,7 @@ class Player():
 							for unit in result[1:]:
 								table.in_game.remove(unit)
 							print("Your hand: ",Card.show_hand(self.hand),"Cards in table: ",Card.show_hand(table.in_game))
-							return Card.show_hand(result), Card.card_name(central_card)
+							return result, central_card
 
 						elif finish.lower() == 'q':
 							quit = True
