@@ -330,8 +330,10 @@ class Player():
 				if card_value == added_value:
 					possible_cap.append([group,card])
 
+		i = 1
 		for obj in possible_cap:
-			print(Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]))
+			print("Number %d: " % i, Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]))
+			i += 1
 
 		while True:
 
@@ -430,8 +432,10 @@ class Player():
 						if group not in possible_combs:
 							possible_combs.append([group,e])
 
+		no = 1
 		for i in possible_combs:
-			print(Card.show_hand(i[0]),"with " + Card.card_name(i[1]))
+			print("Number %d: " % no, Card.show_hand(i[0]),"with " + Card.card_name(i[1]))
+			no += 1
 
 		while True:
 
@@ -482,15 +486,12 @@ class Player():
 class PlayerPack():
 	def __init__(self):
 		self.pack = []
-		self.card_qty = 0
+		self.card_qty = len(self.pack)
 		self.sweep = 0
 		self.aces = 0
 		self.spades = 0
 		self.has_ten_diamonds = False
 		self.has_two_spades = False
-
-	def card_qty(self):
-		return len(self.pack)
 
 	def aces_qty(self):
 		for card in self.pack:
@@ -515,7 +516,6 @@ class PlayerPack():
 				break
 
 	def get_score(self):
-		self.card_qty = self.card_qty()
 		self.aces = self.aces_qty()
 		self.spades = self.spades_qty()
 		self.has_ten_diamonds = self.own_ten_diamonds()
