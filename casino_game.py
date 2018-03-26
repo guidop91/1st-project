@@ -344,7 +344,7 @@ class Player():
 			else:
 				selection = input("Select (1-%d) the capture you want to make: " % len(possible_cap))
 
-			if selection == 'q':
+			if selection.lower() == 'q':
 				break
 
 			if not selection:
@@ -366,7 +366,7 @@ class Player():
 
 			confirm = input("Enter 'y' to confirm selection: ")
 
-			if confirm == 'y':
+			if confirm.lower() == 'y':
 				for i in cap_obj[0]:
 					self.pack.pack.append(i)
 					table.in_game.remove(i)
@@ -416,6 +416,7 @@ class Player():
 
 	def build2(self,table):
 
+		print("You have entered the build function. If at any time you want to get out, enter 'q'.\n")
 		combs = self.all_comb(table)
 		possible_combs = []
 
@@ -430,7 +431,53 @@ class Player():
 							possible_combs.append([group,e])
 
 		for i in possible_combs:
-			print(Card.show_hand(i[0]),Card.card_name(i[1]))
+			print(Card.show_hand(i[0]),"with " + Card.card_name(i[1]))
+
+		while True:
+
+			if not possible_combs:
+				print("There are no possible builds.")
+				break
+
+			if len(possible_combs) == 1:
+				print("There is only one possible selection.")
+				selection = 1
+
+			else:
+				selection = input("Select (1-%d) the build you want to make: " % len(possible_combs))
+
+			if selection.lower() == 'q':
+				break
+
+			try:
+				selection = int(selection)
+			except ValueError:
+				continue
+
+			if selection <= 0 or selection > len(possible_combs):
+				print("Selection must be between 1 and %d." % len(possible_combs))
+				continue
+
+			sel_build = possible_combs[selection-1]
+			print("You have selected: ")
+			print(Card.show_hand(sel_build[0]),"with " + Card.card_name(sel_build[1]))
+
+			confirm = input("Enter 'y' to confirm selection.")
+
+			if confirm.lower() == 'y':
+				for i in sel_build[0]:
+					table.build.append(i)
+					if i in table.in_game:
+						table.in_game.remove(i)
+					if i in self.hand:
+						self.hand.remove(i)
+			else:
+				continue
+
+			print("Build successfully made!")
+			self.has_build = True
+			break
+
 
 class PlayerPack():
 	def __init__(self):
@@ -465,6 +512,7 @@ class PlayerPack():
 			if card_name(card) == "2 of Spades":
 				self.has_two_spades = True
 				break
+
 
 
 class Table():
