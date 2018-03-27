@@ -294,7 +294,6 @@ class Player():
 				if selection <= 0:
 					continue
 
-			print(selection)
 			trail_card = self.hand[selection-1]
 
 			if not self.is_pc:
@@ -438,7 +437,8 @@ class Player():
 
 	def build2(self,table):
 
-		print("You have entered the build function. If at any time you want to get out, enter 'q'.\n")
+		if not self.is_pc:
+			print("You have entered the build function. If at any time you want to get out, enter 'q'.\n")
 		combs = self.all_comb(table)
 		possible_combs = []
 
@@ -452,26 +452,33 @@ class Player():
 						if group not in possible_combs:
 							possible_combs.append([group,e])
 
-		no = 1
-		for i in possible_combs:
-			print("Number %d: " % no, Card.show_hand(i[0]),"with " + Card.card_name(i[1]))
-			no += 1
+		if not self.is_pc:
+			no = 1
+			for i in possible_combs:
+				print("Number %d: " % no, Card.show_hand(i[0]),"with " + Card.card_name(i[1]))
+				no += 1
 
 		while True:
-
+			selection = 0
 			if not possible_combs:
-				print("There are no possible builds.")
+				if not self.is_pc:
+					print("There are no possible builds.")
 				break
 
 			if len(possible_combs) == 1:
-				print("There is only one possible selection.")
+				if not self.is_pc:
+					print("There is only one possible selection.")
 				selection = 1
 
 			else:
-				selection = input("Select (1-%d) the build you want to make: " % len(possible_combs))
+				if not self.is_pc:
+					selection = input("Select (1-%d) the build you want to make: " % len(possible_combs))
 
-				if selection.lower() == 'q':
-					break
+					if selection.lower() == 'q':
+						break
+
+			if self.is_pc:
+				selection = 1
 
 			try:
 				selection = int(selection)
@@ -483,11 +490,15 @@ class Player():
 				continue
 
 			sel_build = possible_combs[selection-1]
-			print("You have selected: ")
-			print(Card.show_hand(sel_build[0]),"with " + Card.card_name(sel_build[1]))
 
-			confirm = input("Enter 'y' to confirm selection.")
+			if not self.is_pc:
+				print("You have selected: ")
+				print(Card.show_hand(sel_build[0]),"with " + Card.card_name(sel_build[1]))
 
+				confirm = input("Enter 'y' to confirm selection.")
+
+			if self.is_pc:
+				confirm = 'y'
 			result = []
 			if confirm.lower() == 'y':
 				for i in sel_build[0]:
@@ -500,7 +511,8 @@ class Player():
 				continue
 
 			table.build.append(result)
-			print("Build successfully made!")
+			if not self.is_pc:
+				print("Build successfully made!")
 			sel_build[1].for_build = True
 			self.has_build = True
 			break
