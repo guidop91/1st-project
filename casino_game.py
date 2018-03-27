@@ -136,7 +136,8 @@ class Player():
 				break
 
 	def capture(self,table):
-		print("You have entered the capture function. If at any time you want to get out, enter 'q'.\n")
+		if not self.is_pc:
+			print("You have entered the capture function. If at any time you want to get out, enter 'q'.\n")
 		tab_combs = self.all_comb2(table)
 		possible_cap = []
 
@@ -162,27 +163,33 @@ class Player():
 				if card_value == added_value:
 					possible_cap.append([group,card])
 
-		i = 1
-		for obj in possible_cap:
-			print("Number %d: " % i, Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]))
-			i += 1
+		if not self.is_pc:
+			i = 1
+			for obj in possible_cap:
+				print("Number %d: " % i, Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]))
+				i += 1
 
 		while True:
 
 			if not possible_cap:
-				print("There are no possible captures.")
+				if not self.is_pc:
+					print("There are no possible captures.")
 				break
 			elif len(possible_cap) == 1:
-				print("Only 1 possible capture.")
+				if not self.is_pc:	
+					print("Only 1 possible capture.")
 				selection = 1
 			else:
-				selection = input("Select (1-%d) the capture you want to make: " % len(possible_cap))
+				if not self.is_pc:
+					selection = input("Select (1-%d) the capture you want to make: " % len(possible_cap))
+				
+					if selection.lower() == 'q':
+						break
+					if not selection:
+						continue
 
-			if selection.lower() == 'q':
-				break
-
-			if not selection:
-				continue
+				else:
+					selection = 1
 
 			try:
 				selection = int(selection)
@@ -195,10 +202,14 @@ class Player():
 
 			cap_obj = possible_cap[selection-1]
 
-			print("You have selected: ")
-			print(Card.show_hand(cap_obj[0]),"with " + Card.card_name(cap_obj[1]))
+			if not self.is_pc:
+				print("You have selected: ")
+				print(Card.show_hand(cap_obj[0]),"with " + Card.card_name(cap_obj[1]))
 
-			confirm = input("Enter 'y' to confirm selection: ")
+			if not self.is_pc:
+				confirm = input("Enter 'y' to confirm selection: ")
+			else:
+				confirm = 'y'
 
 			if confirm.lower() == 'y':
 				for i in cap_obj[0]:
@@ -209,7 +220,8 @@ class Player():
 			else:
 				continue
 
-			print("Capture successfully made!")
+			if not self.is_pc:
+				print("Capture successfully made!")
 
 			break
 
