@@ -68,13 +68,14 @@ class Deck:
 
 class Player():
 	
-	def __init__(self,name=""):
+	def __init__(self,name="",is_pc = False):
 
 		self.name = name
 		self.hand = []
 		self.points = 0
 		self.pack = PlayerPack()
 		self.has_build = False
+		self.is_pc = is_pc
 
 	def build(self,table):
 		#Entire process
@@ -264,47 +265,63 @@ class Player():
 				continue
 
 	def trail(self,table):
-		print("You have entered the trail function. If at any time you want to get out, enter 'q'.\n")
+
+		if not self.is_pc:
+			print("You have entered the trail function. If at any time you want to get out, enter 'q'.\n")
 		while True:
+			selection = 0
+			if not self.is_pc:
+				print(Card.show_hand(self.hand))
+				selection = input("Enter (1-%d) the card you want leave on the table: " % len(self.hand))
+				print("")
 
-			print(Card.show_hand(self.hand))
-			selection = input("Enter (1-%d) the card you want leave on the table: " % len(self.hand))
-			print("")
+			else:
+				selection = 1
 
-			if not selection:
-				continue
-			if selection.lower() == "q":
-				break
-			
-			try:
-				selection = int(selection)
-			except ValueError:
-				continue
+			if not self.is_pc:
+				if not selection:
+					continue
+				if selection.lower() == "q":
+					break
+				
+				try:
+					selection = int(selection)
+				except ValueError:
+					continue
 
-			if selection > len(self.hand):
-				continue
-			if selection <= 0:
-				continue
+				if selection > len(self.hand):
+					continue
+				if selection <= 0:
+					continue
 
+			print(selection)
 			trail_card = self.hand[selection-1]
 
-			print("You have selected %s. " % Card.card_name(trail_card))
+			if not self.is_pc:
 
-			selection2 = input("Are you sure? Enter \"y\" to proceed. ")
+				print("You have selected %s. " % Card.card_name(trail_card))
 
-			if not selection2:
-				continue
-			elif selection2.lower() == "q":
-				break
-			elif selection2.lower() == 'y':
+				selection2 = input("Are you sure? Enter \"y\" to proceed. ")
+
+				if not selection2:
+					continue
+				elif selection2.lower() == "q":
+					break
+				elif selection2.lower() == 'y':
+					table.in_game.append(trail_card)
+					self.hand.remove(trail_card)
+
+					print(Card.show_hand(self.hand))
+					print(Card.show_hand(table.in_game))
+					break
+				else:
+					continue
+
+			else:
+
 				table.in_game.append(trail_card)
 				self.hand.remove(trail_card)
-
-				print(Card.show_hand(self.hand))
-				print(Card.show_hand(table.in_game))
 				break
-			else:
-				continue
 
 	def capture(self,table):
 		print("You have entered the capture function. If at any time you want to get out, enter 'q'.\n")
@@ -613,4 +630,4 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 
 
-play_casino()
+# play_casino()
