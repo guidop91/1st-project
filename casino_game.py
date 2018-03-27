@@ -408,9 +408,9 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 	if not player:
 		print("Starting up!")
 		player = human
-		cpu1 = Player("cpu1")
-		cpu2 = Player("cpu2")
-		cpu3 = Player("cpu3")
+		cpu1 = Player("cpu1",True)
+		cpu2 = Player("cpu2",True)
+		cpu3 = Player("cpu3",True)
 		table1 = Table()
 		deck1 = Deck()
 		table1.start_game(deck1)
@@ -432,39 +432,61 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 			for w in winner:
 				print("Congratulations, %s!!" % w.name)
 
-	if not player.hand:
+	while deck1.cards:
+
+		if not player.hand:
+			for person in people:
+				deck1.deal_player(person)
+
 		for person in people:
-			deck1.deal_player(person)
+			print("TABLE: ",Card.show_hand(table1.in_game))
+			for group in table1.build:
+				print("BUILD: ",Card.show_hand(group))
+			if not person.is_pc:
+				for k,v in gameplay.items():
+					print("%s: %s" % (k,v))
+				while True:
+					not_played = len(person.hand)
+					slct = input("How would you like to play?")
 
-	for person in people:
-		if person == people[0]:
-			for k,v in gameplay.items():
-				print("%s: %s" % (k,v))
-			while True:
+					try:
+						slct = int(slct)
+					except ValueError:
+						continue
+
+					if slct not in gameplay.keys():
+						continue
+				
+					if slct == 1:
+						person.build2(table1)
+					elif slct == 2:
+						person.capture(table1)
+					else:
+						person.trail(table1)
+
+					if len(person.hand) == not_played:
+						continue
+					else:
+						break
+
+			else:
 				not_played = len(person.hand)
-				slct = input("How would you like to play?")
 
-				try:
-					slct = int(slct)
-				except ValueError:
+				person.build2(table1)
+
+				if len(person.hand) < not_played:
+					print("%s played build." % person.name)
 					continue
 
-				if slct not in gameplay.keys():
+				person.capture(table1)
+
+				if len(person.hand) < not_played:
+					print("%s played capture." % person.name)
 					continue
-			
-				if slct == 1:
-					person.build2(table1)
-				elif slct == 2:
-					person.capture(table1)
-				else:
-					person.trail(table1)
 
-				if len(person.hand) == not_played:
-					continue
-				else:
-					break
+				person.trail(table1)
+				print("%s played trail." % person.name)
 
 
 
-
-# play_casino()
+play_casino()
