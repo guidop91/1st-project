@@ -557,8 +557,13 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 		cpu1 = Player("cpu1")
 		cpu2 = Player("cpu2")
 		cpu3 = Player("cpu3")
+		table1 = Table()
+		deck1 = Deck()
+		table1.start_game(deck1)
 
 	people = (player,cpu1,cpu2,cpu3)
+
+	gameplay = {1: "build2(table1)", 2: "capture(table1)", 3: "trail(table1)"}
 
 	winner = []
 	for person in people:
@@ -572,5 +577,40 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 			print("We have multiple winners!")
 			for w in winner:
 				print("Congratulations, %s!!" % w.name)
+
+	if not player.hand:
+		for person in people:
+			deck1.deal_player(person)
+
+	for person in people:
+		if person == people[0]:
+			for k,v in gameplay.items():
+				print("%s: %s" % (k,v))
+			while True:
+				not_played = len(person.hand)
+				slct = input("How would you like to play?")
+
+				try:
+					slct = int(slct)
+				except ValueError:
+					continue
+
+				if slct not in gameplay.keys():
+					continue
+			
+				if slct == 1:
+					person.build2(table1)
+				elif slct == 2:
+					person.capture(table1)
+				else:
+					person.trail(table1)
+
+				if len(person.hand) == not_played:
+					continue
+				else:
+					break
+
+
+
 
 play_casino()
