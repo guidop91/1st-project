@@ -538,3 +538,39 @@ class Table():
 		#Draw initial cards for game start. 
 		for i in range(0,4):
 			self.in_game.append(deck.draw_card())
+
+
+############## Game Logic #######################
+
+print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
+the rules of the game.")
+
+human = Player(input("Enter your name here: "))
+
+print("Hi, %s! Let's get things moving!" % human.name)
+
+def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
+	
+	if not player:
+		print("Starting up!")
+		player = human
+		cpu1 = Player("cpu1")
+		cpu2 = Player("cpu2")
+		cpu3 = Player("cpu3")
+
+	people = (player,cpu1,cpu2,cpu3)
+
+	winner = []
+	for person in people:
+		if person.points >= 21:
+			winner.append(person)
+
+	if winner:
+		if len(winner) == 1:
+			print("We have a winner!! Congratulations %s!!" % winner[0].name)
+		else:
+			print("We have multiple winners!")
+			for w in winner:
+				print("Congratulations, %s!!" % w.name)
+
+play_casino()
