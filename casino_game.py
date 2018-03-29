@@ -233,10 +233,17 @@ class Player():
 					self.pack.pack.append(i)
 					if i in table.in_game:
 						table.in_game.remove(i)
-					if i in table.build:
-						table.build.remove(i)
+						continue
+					for group in table.build:
+						if i in group["Build"]:
+							table.build.remove(group)
+
 				self.pack.pack.append(cap_obj[1])
 				self.hand.remove(cap_obj[1])
+
+				if not table.in_game and not table.build:
+					print("%s has sweeped the table!" % self.name)
+					self.pack.sweep += 1
 			else:
 				continue
 
@@ -418,12 +425,12 @@ class Table():
 
 ############## Game Logic #######################
 
-# print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
-# the rules of the game.")
+print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
+the rules of the game.")
 
-# human = Player(input("Enter your name here: "))
+human = Player(input("Enter your name here: "))
 
-# print("Hi, %s! Let's get things moving!" % human.name)
+print("Hi, %s! Let's get things moving!" % human.name)
 
 def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 	
@@ -439,7 +446,7 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 	people = (player,cpu1,cpu2,cpu3)
 
-	gameplay = {1: "build2(table1)", 2: "capture(table1)", 3: "trail(table1)"}
+	gameplay = {1: "Build", 2: "Capture", 3: "Trail"}
 
 	winner = []
 	for person in people:
@@ -463,8 +470,9 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 		for person in people:
 			print("TABLE: ",Card.show_hand(table1.in_game))
 			for group in table1.build:
-				print("BUILD: ",Card.show_hand(group))
+				print("BUILD: ",Card.show_hand(group["Build"]))
 			if not person.is_pc:
+				print("Your hand: ", Card.show_hand(person.hand))
 				for k,v in gameplay.items():
 					print("%s: %s" % (k,v))
 				while True:
@@ -494,16 +502,16 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 			else:
 				not_played = len(person.hand)
 
-				person.build2(table1)
-
-				if len(person.hand) < not_played:
-					print("%s played build." % person.name)
-					continue
-
 				person.capture(table1)
 
 				if len(person.hand) < not_played:
 					print("%s played capture." % person.name)
+					continue
+
+				person.build2(table1)				
+
+				if len(person.hand) < not_played:
+					print("%s played build." % person.name)
 					continue
 
 				person.trail(table1)
@@ -511,4 +519,4 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 
 
-# play_casino()
+play_casino()
