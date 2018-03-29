@@ -77,10 +77,18 @@ class Player():
 		self.is_pc = is_pc
 
 	def trail(self,table):
+		permission = True
+		for group in table.build:
+			if self == group["Owner"]:
+				print("Cannot use trail function if you have a build. Use either capture or make another build.")
+				permission = False
+		
+		
+		while permission:
 
-		if not self.is_pc:
-			print("You have entered the trail function. If at any time you want to get out, enter 'q'.\n")
-		while True:
+			if not self.is_pc:
+				print("You have entered the trail function. If at any time you want to get out, enter 'q'.\n")
+
 			selection = 0
 			if not self.is_pc:
 				print(Card.show_hand(self.hand))
@@ -121,9 +129,6 @@ class Player():
 				elif selection2.lower() == 'y':
 					table.in_game.append(trail_card)
 					self.hand.remove(trail_card)
-
-					print(Card.show_hand(self.hand))
-					print(Card.show_hand(table.in_game))
 					break
 				else:
 					continue
