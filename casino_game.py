@@ -74,7 +74,6 @@ class Player():
 		self.hand = []
 		self.points = 0
 		self.pack = PlayerPack()
-		self.has_build = False
 		self.is_pc = is_pc
 
 	def trail(self,table):
@@ -311,7 +310,6 @@ class Player():
 			if not self.is_pc:
 				print("Build successfully made!")
 			sel_build[1].for_build = True
-			self.has_build = True
 			break
 
 	def all_comb(self,table):
