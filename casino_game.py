@@ -314,7 +314,6 @@ class Player():
 			table.build.append(res_dict)
 			if not self.is_pc:
 				print("Build successfully made!")
-			sel_build[1].for_build = True
 			break
 
 	def all_comb(self,table):
