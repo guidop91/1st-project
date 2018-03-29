@@ -8,8 +8,6 @@ class Card:
 	def __init__(self,suit,rank):
 		self.suit = suit
 		self.rank = rank
-		self.for_build = False
-
 
 	def rank_value(self,acevalue = None):
 		ROYALTY = {"Jack":11,"Queen":12,"King":13}
