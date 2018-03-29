@@ -301,7 +301,13 @@ class Player():
 			else:
 				continue
 
-			table.build.append(result)
+			#Make the build a dictionary, so we know who built it.
+
+			res_dict = {}
+			res_dict["Build"] = result
+			res_dict["Owner"] = self
+
+			table.build.append(res_dict)
 			if not self.is_pc:
 				print("Build successfully made!")
 			sel_build[1].for_build = True
@@ -395,12 +401,12 @@ class Table():
 
 ############## Game Logic #######################
 
-print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
-the rules of the game.")
+# print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
+# the rules of the game.")
 
-human = Player(input("Enter your name here: "))
+# human = Player(input("Enter your name here: "))
 
-print("Hi, %s! Let's get things moving!" % human.name)
+# print("Hi, %s! Let's get things moving!" % human.name)
 
 def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 	
@@ -488,4 +494,4 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 
 
-play_casino()
+# play_casino()
