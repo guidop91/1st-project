@@ -143,6 +143,7 @@ class Player():
 				enter 'q'.\n")
 		tab_combs = self.all_comb2(table)
 		possible_cap = []
+		build_cap = []
 
 		#Make sure aces are included for single capture
 		for card in self.hand:
@@ -166,14 +167,27 @@ class Player():
 				if card_value == added_value:
 					possible_cap.append([group,card])
 
+		#For build capture.
+		for card in self.hand:
+			card_value = Card.rank_value(card,14)
+			for group in table.build:
+				added_value = 0
+				for unit in group["Build"]:
+					added_value += Card.rank_value(unit,1)
+				if card_value == added_value:
+					build_cap.append([group["Build"],card])
+
 		if not self.is_pc:
 			i = 1
 			for obj in possible_cap:
 				print("Number %d: " % i, Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]))
 				i += 1
+			for obj in build_cap:
+				print("Number %d: " % i, Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]) + ". BUILD")
+				i += 1
 
 		while True:
-
+			possible_cap.extend(build_cap)
 			if not possible_cap:
 				if not self.is_pc:
 					print("There are no possible captures.")
@@ -192,7 +206,7 @@ class Player():
 						continue
 
 				else:
-					selection = 1
+					selection = len(possible_cap)
 
 			try:
 				selection = int(selection)
@@ -217,7 +231,10 @@ class Player():
 			if confirm.lower() == 'y':
 				for i in cap_obj[0]:
 					self.pack.pack.append(i)
-					table.in_game.remove(i)
+					if i in table.in_game:
+						table.in_game.remove(i)
+					if i in table.build:
+						table.build.remove(i)
 				self.pack.pack.append(cap_obj[1])
 				self.hand.remove(cap_obj[1])
 			else:
