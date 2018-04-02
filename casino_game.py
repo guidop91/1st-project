@@ -88,10 +88,15 @@ class Player():
 				print("You have entered the trail function. If at any time you want to get out, enter 'q'.\n")
 
 			selection = 0
+
 			if not self.is_pc:
-				print(Card.show_hand(self.hand))
-				selection = input("Enter (1-%d) the card you want leave on the table: " % len(self.hand))
-				print("")
+				if len(self.hand)==1:
+					print("You can only choose one card.")
+					selection = 1
+				else:
+					print(Card.show_hand(self.hand))
+					selection = input("Enter (1-%d) the card you want leave on the table: " % len(self.hand))
+					print("")
 
 			else:
 				selection = 1
@@ -185,8 +190,9 @@ class Player():
 				print("Number %d: " % i, Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]) + ". BUILD")
 				i += 1
 
+		possible_cap.extend(build_cap)
 		while True:
-			possible_cap.extend(build_cap)
+			
 			if not possible_cap:
 				if not self.is_pc:
 					print("There are no possible captures.")
@@ -431,7 +437,7 @@ the rules of the game.")
 # human = Player(input("Enter your name here: "))
 
 
-player = Player("Human",True)
+player = Player("Human",False)
 cpu1 = Player("cpu1",True)
 cpu2 = Player("cpu2",True)
 cpu3 = Player("cpu3",True)
@@ -606,7 +612,7 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 		print("%s has %d points." % (person.name,person.points))
 		person.pack = PlayerPack()
 
-	#The firsts shall be the last
+	#The firsts shall be the lasts
 	first = people[0]
 	people.remove(first)
 	people.append(first)
