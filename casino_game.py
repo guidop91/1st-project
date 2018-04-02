@@ -349,6 +349,8 @@ class Player():
 		for L in range(1,len(table.in_game)+1):
 			all_comb.append(itertools.combinations(table.in_game,L))
 
+		#The combination method returns an object that contains the possible combinations. 
+		#The object is iterable. It contains a list of tuples of those combinations.
 		result = []
 		for e in all_comb:
 			for value in e:
@@ -358,8 +360,8 @@ class Player():
 		for group in result:
 			for card in self.hand:
 				group.append(card)
-				result2.append(tuple(group))
-				group.remove(card)
+				result2.append(tuple(group)) #Make what I add to result2 unique and unalterable, so when 
+				group.remove(card) #I remove it, the result2 is not affected.
 
 		return result2
 
