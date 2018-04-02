@@ -374,7 +374,7 @@ class Player():
 class PlayerPack():
 	def __init__(self):
 		self.pack = []
-		self.card_qty = len(self.pack)
+		self.card_qty = 0
 		self.sweep = 0
 		self.aces = 0
 		self.spades = 0
@@ -408,6 +408,7 @@ class PlayerPack():
 		self.spades = self.spades_qty()
 		self.has_ten_diamonds = self.own_ten_diamonds()
 		self.has_two_spades = self.own_two_spades()
+		self.card_qty = len(self.pack)
 
 
 class Table():
@@ -539,9 +540,7 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 
 	#Get points for sweeps. Player with min. sweeps reduces the other player sweeps.
-	print(sweep_comp)
 	sweeps_redux = min(sweep_comp)
-	print(sweeps_redux)
 
 	i = 0
 	while i<len(sweep_comp):
@@ -553,7 +552,21 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 		people[pos].points += e
 		pos += 1
 
-	print(sweep_comp)
+
+
+	#Compare player's card quantities
+	print(pack_qty_comp)
+	most_cards = max(pack_qty_comp)
+	print(most_cards)
+
+	if pack_qty_comp.count(most_cards)>1:
+		print("There's a tie for most cards. No one gets points.")
+	else:
+		most_cards_holder = people[pack_qty_comp.index(most_cards)]
+		print("%s has the most cards. He gets 3 points." % most_cards_holder.name)
+		most_cards_holder.points += 3
+
+
 
 
 
