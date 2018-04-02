@@ -440,11 +440,13 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 		cpu1 = Player("cpu1",True)
 		cpu2 = Player("cpu2",True)
 		cpu3 = Player("cpu3",True)
-		table1 = Table()
-		deck1 = Deck()
-		table1.start_game(deck1)
+	
 
-	people = (player,cpu1,cpu2,cpu3)
+	table1 = Table()
+	deck1 = Deck()
+	table1.start_game(deck1)
+
+	people = [player,cpu1,cpu2,cpu3]
 
 	gameplay = {1: "Build", 2: "Capture", 3: "Trail"}
 
@@ -456,17 +458,21 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 	if winner:
 		if len(winner) == 1:
 			print("We have a winner!! Congratulations %s!!" % winner[0].name)
+			return
 		else:
 			print("We have multiple winners!")
 			for w in winner:
 				print("Congratulations, %s!!" % w.name)
+			return
 
+	log = []
 	while deck1.cards or player.hand or cpu1.hand or cpu2.hand or cpu3.hand:
 
 		if not player.hand:
 			for person in people:
 				deck1.deal_player(person)
 
+		
 		for person in people:
 			print("TABLE: ",Card.show_hand(table1.in_game))
 			for group in table1.build:
@@ -497,6 +503,7 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 					if len(person.hand) == not_played:
 						continue
 					else:
+						log.append(gameplay[slct])
 						break
 
 			else:
@@ -506,17 +513,32 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 				if len(person.hand) < not_played:
 					print("%s played capture." % person.name)
+					log.append("Capture")
 					continue
 
 				person.build2(table1)				
 
 				if len(person.hand) < not_played:
 					print("%s played build." % person.name)
+					log.append("Build")
 					continue
 
 				person.trail(table1)
 				print("%s played trail." % person.name)
+				log.append("Trail")
 
+
+
+	print("\nTHIS ROUND IS OVER\n")
+
+	i = -1
+	while True:
+		if log[i] == "Capture":
+			people[i%4].pack.pack.extend(table1.in_game)
+			print("%s was the last to capture, so gets all cards left in table.\n" % people[i%4].name)
+			break
+		else:
+			i -= 1
 
 	spades_qty_comp = []
 	sweep_comp = []
@@ -528,11 +550,13 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 		if person.pack.has_two_spades:
 			person.points += 1
+			print("%s has the two of spades. He gets 1 point.\n" % person.name)
 		if person.pack.has_ten_diamonds:
 			person.points += 2
-
+			print("%s has the ten of diamonds. He gets 2 points.\n" % person.name)
 		if person.pack.aces:
 			person.points += person.pack.aces
+			print("%s gets %d points for his aces.\n" %(person.name,person.pack.aces))
 
 		spades_qty_comp.append(person.pack.spades)
 		sweep_comp.append(person.pack.sweep)
@@ -540,6 +564,9 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 	#Get points for sweeps. Player with min. sweeps reduces the other player sweeps.
 	sweeps_redux = min(sweep_comp)
+
+	if sweeps_redux >0:
+		print("Everyone's sweeps get reduced by %d, the least amount from the players.\n" % sweeps_redux)
 
 	i = 0
 	while i<len(sweep_comp):
@@ -554,34 +581,33 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 
 	#Compare player's card quantities
-	print(pack_qty_comp)
 	most_cards = max(pack_qty_comp)
-	print(most_cards)
 
 	if pack_qty_comp.count(most_cards)>1:
-		print("There's a tie for most cards. No one gets points.")
+		print("There's a tie for most cards. No one gets points.\n")
 	else:
 		most_cards_holder = people[pack_qty_comp.index(most_cards)]
-		print("%s has the most cards. He gets 3 points." % most_cards_holder.name)
+		print("%s has the most cards. He gets 3 points.\n" % most_cards_holder.name)
 		most_cards_holder.points += 3
 
 	#Compare player's spade quantities.
-	print(spades_qty_comp)
 	most_spades = max(spades_qty_comp)
-	print(most_spades)
 
 	if spades_qty_comp.count(most_spades)>1:
-		print("There's a tie for most spades. No one gets points.")
+		print("There's a tie for most spades. No one gets points.\n")
 	else:
 		most_spades_holder = people[spades_qty_comp.index(most_spades)]
-		print("%s has the most spades. He gets 1 point." % most_spades_holder.name)
+		print("%s has the most spades. He gets 1 point.\n" % most_spades_holder.name)
 		most_spades_holder.points += 1
 
+
+	#Point display
+	print("SCOREBOARD")
 	for person in people:
 		print("%s has %d points." % (person.name,person.points))
+		person.pack = PlayerPack()
 
-
-
+	play_casino(player,cpu1,cpu2,cpu3)
 
 
 
