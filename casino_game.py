@@ -101,7 +101,7 @@ class Player():
 			else:
 				selection = 1
 
-			if not self.is_pc:
+			if selection != 1:
 				if not selection:
 					continue
 				if selection.lower() == "q":
