@@ -139,8 +139,7 @@ class Player():
 
 	def capture(self,table):
 		if not self.is_pc:
-			print("You have entered the capture function. If at any time you want to get out, \
-				enter 'q'.\n")
+			print("You have entered the capture function. If at any time you want to get out, enter 'q'.\n")
 		tab_combs = self.all_comb2(table)
 		possible_cap = []
 		build_cap = []
@@ -461,7 +460,7 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 			for w in winner:
 				print("Congratulations, %s!!" % w.name)
 
-	while deck1.cards:
+	while deck1.cards or player.hand or cpu1.hand or cpu2.hand or cpu3.hand:
 
 		if not player.hand:
 			for person in people:
@@ -477,7 +476,7 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 					print("%s: %s" % (k,v))
 				while True:
 					not_played = len(person.hand)
-					slct = input("How would you like to play?")
+					slct = input("How would you like to play? ")
 
 					try:
 						slct = int(slct)
