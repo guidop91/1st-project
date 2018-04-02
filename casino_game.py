@@ -393,13 +393,13 @@ class PlayerPack():
 
 	def own_ten_diamonds(self):
 		for card in self.pack:
-			if card_name(card) == "10 of Diamonds":
+			if Card.card_name(card) == "10 of Diamonds":
 				self.has_ten_diamonds = True
 				break
 
 	def own_two_spades(self):
 		for card in self.pack:
-			if card_name(card) == "2 of Spades":
+			if Card.card_name(card) == "2 of Spades":
 				self.has_two_spades = True
 				break
 
@@ -424,18 +424,18 @@ class Table():
 
 ############## Game Logic #######################
 
-print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
-the rules of the game.")
+# print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
+# the rules of the game.")
 
-human = Player(input("Enter your name here: "))
+# human = Player(input("Enter your name here: "))
 
-print("Hi, %s! Let's get things moving!" % human.name)
+# print("Hi, %s! Let's get things moving!" % human.name)
 
 def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 	
 	if not player:
 		print("Starting up!")
-		player = human
+		player = Player("Human1",True)
 		cpu1 = Player("cpu1",True)
 		cpu2 = Player("cpu2",True)
 		cpu3 = Player("cpu3",True)
@@ -515,6 +515,49 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 
 				person.trail(table1)
 				print("%s played trail." % person.name)
+
+
+	spades_qty_comp = []
+	sweep_comp = []
+	pack_qty_comp = []
+
+	for person in people:
+
+		person.pack.get_score()
+
+		if person.pack.has_two_spades:
+			person.points += 1
+		if person.pack.has_ten_diamonds:
+			person.points += 2
+
+		if person.pack.aces:
+			person.points += person.pack.aces
+
+		spades_qty_comp.append(person.pack.spades_qty)
+		sweep_comp.append(person.pack.sweep)
+		pack_qty_comp.append(person.pack.card_qty)
+
+
+	#Get points for sweeps. Player with min. sweeps reduces the other player sweeps.
+	print(sweep_comp)
+	sweeps_redux = min(sweep_comp)
+	print(sweeps_redux)
+
+	i = 0
+	while i<len(sweep_comp):
+		sweep_comp[i] -= sweeps_redux
+		i += 1
+
+	for e in sweep_comp:
+		pos = 0
+		people[pos].points += e
+		pos += 1
+
+	print(sweep_comp)
+
+
+
+
 
 
 
