@@ -425,28 +425,27 @@ class Table():
 
 ############## Game Logic #######################
 
-# print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
-# the rules of the game.")
+print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
+the rules of the game.")
 
 # human = Player(input("Enter your name here: "))
 
+
+player = Player("Human",True)
+cpu1 = Player("cpu1",True)
+cpu2 = Player("cpu2",True)
+cpu3 = Player("cpu3",True)
+
 # print("Hi, %s! Let's get things moving!" % human.name)
 
-def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
-	
-	if not player:
-		print("Starting up!")
-		player = Player("Human1",True)
-		cpu1 = Player("cpu1",True)
-		cpu2 = Player("cpu2",True)
-		cpu3 = Player("cpu3",True)
-	
+people = [player,cpu1,cpu2,cpu3]
 
+def play_casino(player,cpu1,cpu2,cpu3,people):
+	
 	table1 = Table()
 	deck1 = Deck()
 	table1.start_game(deck1)
 
-	people = [player,cpu1,cpu2,cpu3]
 
 	gameplay = {1: "Build", 2: "Capture", 3: "Trail"}
 
@@ -607,8 +606,13 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 		print("%s has %d points." % (person.name,person.points))
 		person.pack = PlayerPack()
 
-	play_casino(player,cpu1,cpu2,cpu3)
+	#The firsts shall be the last
+	first = people[0]
+	people.remove(first)
+	people.append(first)
+
+	play_casino(player,cpu1,cpu2,cpu3,people)
 
 
 
-play_casino()
+play_casino(player,cpu1,cpu2,cpu3,people)
