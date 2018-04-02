@@ -404,10 +404,10 @@ class PlayerPack():
 				break
 
 	def get_score(self):
-		self.aces = self.aces_qty()
-		self.spades = self.spades_qty()
-		self.has_ten_diamonds = self.own_ten_diamonds()
-		self.has_two_spades = self.own_two_spades()
+		self.aces_qty()
+		self.spades_qty()
+		self.own_ten_diamonds()
+		self.own_two_spades()
 		self.card_qty = len(self.pack)
 
 
@@ -534,10 +534,9 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 		if person.pack.aces:
 			person.points += person.pack.aces
 
-		spades_qty_comp.append(person.pack.spades_qty)
+		spades_qty_comp.append(person.pack.spades)
 		sweep_comp.append(person.pack.sweep)
 		pack_qty_comp.append(person.pack.card_qty)
-
 
 	#Get points for sweeps. Player with min. sweeps reduces the other player sweeps.
 	sweeps_redux = min(sweep_comp)
@@ -566,8 +565,20 @@ def play_casino(player=None,cpu1=None,cpu2=None,cpu3=None):
 		print("%s has the most cards. He gets 3 points." % most_cards_holder.name)
 		most_cards_holder.points += 3
 
+	#Compare player's spade quantities.
+	print(spades_qty_comp)
+	most_spades = max(spades_qty_comp)
+	print(most_spades)
 
+	if spades_qty_comp.count(most_spades)>1:
+		print("There's a tie for most spades. No one gets points.")
+	else:
+		most_spades_holder = people[spades_qty_comp.index(most_spades)]
+		print("%s has the most spades. He gets 1 point." % most_spades_holder.name)
+		most_spades_holder.points += 1
 
+	for person in people:
+		print("%s has %d points." % (person.name,person.points))
 
 
 
