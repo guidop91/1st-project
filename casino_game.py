@@ -73,6 +73,9 @@ class Player():
 		self.points = 0
 		self.pack = PlayerPack()
 		self.is_pc = is_pc
+		self.eighteen_rest = False
+		self.nineteen_rest = False
+		self.twenty_rest = False
 
 	def trail(self,table):
 		permission = True
