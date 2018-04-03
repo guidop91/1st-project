@@ -73,6 +73,7 @@ class Player():
 		self.points = 0
 		self.pack = PlayerPack()
 		self.is_pc = is_pc
+		#Point restrictions for winning
 		self.eighteen_rest = False
 		self.nineteen_rest = False
 		self.twenty_rest = False
@@ -464,6 +465,21 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 		if total_score > 20:
 			print("%s is the winning team. Congratulations!!" % team_names)
 			return
+		elif total_score == 18:
+			for unit in team:
+				unit.eighteen_rest = True
+				if team.index(unit) == 0:
+					print("Team %s gets a restriction for having 18 points." % team_names)
+		elif total_score == 19:
+			for unit in team:
+				unit.nineteen_rest = True
+				if team.index(unit) == 0:
+					print("Team %s gets a restriction for having 19 points." % team_names)
+		elif total_score == 20:
+			for unit in team:
+				unit.twenty_rest = True
+				if team.index(unit) == 0:
+					print("Team %s gets a restriction for having 20 points." % team_names)
 
 	log = []
 	while deck1.cards or player.hand or cpu1.hand or cpu2.hand or cpu3.hand:
@@ -545,18 +561,20 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 	pack_qty_comp = []
 
 	for person in people:
+		if not person.eighteen_rest and not person.twenty_rest:
+			person.pack.get_score()
 
-		person.pack.get_score()
-
-		if person.pack.has_two_spades:
-			person.points += 1
-			print("%s has the two of spades. He gets 1 point.\n" % person.name)
-		if person.pack.has_ten_diamonds:
-			person.points += 2
-			print("%s has the ten of diamonds. He gets 2 points.\n" % person.name)
-		if person.pack.aces:
-			person.points += person.pack.aces
-			print("%s gets %d points for his aces.\n" %(person.name,person.pack.aces))
+			if person.pack.has_two_spades:
+				if not person.nineteen_rest:
+					person.points += 1
+					print("%s has the two of spades. He gets 1 point.\n" % person.name)
+			if person.pack.has_ten_diamonds:
+				person.points += 2
+				print("%s has the ten of diamonds. He gets 2 points.\n" % person.name)
+			if person.pack.aces:
+				if not person.nineteen_rest:
+					person.points += person.pack.aces
+					print("%s gets %d points for his aces.\n" %(person.name,person.pack.aces))
 
 		spades_qty_comp.append(person.pack.spades)
 		sweep_comp.append(person.pack.sweep)
@@ -575,7 +593,9 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 
 	for e in sweep_comp:
 		pos = 0
-		people[pos].points += e
+		#If there's any restriction, no points are added.
+		if not people[pos].eighteen_rest and not people[pos].nineteen_rest and not people[pos].twenty_rest:
+			people[pos].points += e
 		pos += 1
 
 
@@ -587,8 +607,13 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 		print("There's a tie for most cards. No one gets points.\n")
 	else:
 		most_cards_holder = people[pack_qty_comp.index(most_cards)]
-		print("%s has the most cards. He gets 3 points.\n" % most_cards_holder.name)
-		most_cards_holder.points += 3
+		#If nineteen or twenty point restriction is on, no points. Eighteen point restriction
+		#calls for this condition to be met.
+		if not most_cards_holder.nineteen_rest and not most_cards_holder.twenty_rest:
+			print("%s has the most cards. He gets 3 points.\n" % most_cards_holder.name)
+			most_cards_holder.points += 3
+		else:
+			print("The player with most cards has a restriction for points. No points added.")
 
 	#Compare player's spade quantities.
 	most_spades = max(spades_qty_comp)
@@ -597,12 +622,17 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 		print("There's a tie for most spades. No one gets points.\n")
 	else:
 		most_spades_holder = people[spades_qty_comp.index(most_spades)]
-		print("%s has the most spades. He gets 1 point.\n" % most_spades_holder.name)
-		most_spades_holder.points += 1
+		#If eighteen or nineteen restriction is on, no points. Twenty restriction
+		#calls for this condition to be met. 
+		if not most_spades_holder.eighteen_rest and not most_spades_holder.nineteen_rest:
+			print("%s has the most spades. He gets 1 point.\n" % most_spades_holder.name)
+			most_spades_holder.points += 1
+		else:
+			print("Player with most spades has a restriction for points. No points added.")
 
 
 	#Point display
-	print("SCOREBOARD")
+	print("----------SCOREBOARD----------")
 	for team in teams:
 		total_score = 0
 		team_names = []
