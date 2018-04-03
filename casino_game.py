@@ -528,19 +528,19 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 				person.capture(table1)
 
 				if len(person.hand) < not_played:
-					print("%s played capture." % person.name)
+					print("%s played capture.\n" % person.name)
 					log.append("Capture")
 					continue
 
 				person.build2(table1)				
 
 				if len(person.hand) < not_played:
-					print("%s played build." % person.name)
+					print("%s played build.\n" % person.name)
 					log.append("Build")
 					continue
 
 				person.trail(table1)
-				print("%s played trail." % person.name)
+				print("%s played trail.\n" % person.name)
 				log.append("Trail")
 
 
@@ -642,7 +642,7 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 			person.pack = PlayerPack()
 		print("%s has %d points." % (team_names,total_score))
 
-	print("|||||||||||||||||||||||||\n")
+	print("------------------------------\n")
 
 	#The firsts shall be the last
 	first = people[0]
