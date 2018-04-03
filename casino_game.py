@@ -426,7 +426,7 @@ class Table():
 ############## Game Logic #######################
 
 print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
-the rules of the game.")
+the rules of the game.\n\n")
 
 # human = Player(input("Enter your name here: "))
 
@@ -446,22 +446,20 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 	deck1 = Deck()
 	table1.start_game(deck1)
 
+	team1 = (player,cpu2)
+	team2 = (cpu1,cpu3)
+	teams = (team1,team2)
 
 	gameplay = {1: "Build", 2: "Capture", 3: "Trail"}
 
-	winner = []
-	for person in people:
-		if person.points >= 21:
-			winner.append(person)
-
-	if winner:
-		if len(winner) == 1:
-			print("We have a winner!! Congratulations %s!!" % winner[0].name)
-			return
-		else:
-			print("We have multiple winners!")
-			for w in winner:
-				print("Congratulations, %s!!" % w.name)
+	for team in teams:
+		total_score = 0
+		team_names = []
+		for unit in team:
+			total_score += unit.points
+			team_names.append(unit.name)
+		if total_score > 20:
+			print("%s is the winning team. Congratulations!!" % team_names)
 			return
 
 	log = []
@@ -602,9 +600,16 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 
 	#Point display
 	print("SCOREBOARD")
-	for person in people:
-		print("%s has %d points." % (person.name,person.points))
-		person.pack = PlayerPack()
+	for team in teams:
+		total_score = 0
+		team_names = []
+		for person in team:
+			total_score += person.points
+			team_names.append(person.name)
+			person.pack = PlayerPack()
+		print("%s has %d points." % (team_names,total_score))
+
+	print("|||||||||||||||||||||||||\n")
 
 	#The firsts shall be the last
 	first = people[0]
