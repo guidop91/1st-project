@@ -84,8 +84,17 @@ class Player():
 			if self == group["Owner"]:
 				print("Cannot use trail function if you have a build. Use either capture or make another build.")
 				permission = False
+				break
 		
+		for card1 in table.in_game:
+			for card2 in self.hand:
+				if Card.rank_value(card1,1) == Card.rank_value(card2,1):
+					print("Cannot use trail function if a card in table is same value as a card in hand.")
+					permission = False
+					break
 		
+
+
 		while permission:
 
 			if not self.is_pc:
@@ -365,7 +374,7 @@ class Player():
 			for card in self.hand:
 				group.append(card)
 				result2.append(tuple(group)) #Make what I add to result2 unique and unalterable, so when 
-				group.remove(card) #I remove it, the result2 is not affected.
+				group.remove(card)           #I remove it, the result2 is not affected.
 
 		return result2
 
@@ -435,20 +444,25 @@ class Table():
 			self.in_game.append(deck.draw_card())
 
 
-############## Game Logic #######################
+
+#################################################################################################################
+########################################### Game Logic ##########################################################
+#################################################################################################################
+
+
 
 print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
 the rules of the game.\n\n")
 
-# human = Player(input("Enter your name here: "))
+human = Player(input("Enter your name here: "))
 
 
-player = Player("Human",False)
+player = human
 cpu1 = Player("cpu1",True)
 cpu2 = Player("cpu2",True)
 cpu3 = Player("cpu3",True)
 
-# print("Hi, %s! Let's get things moving!" % human.name)
+print("Hi, %s! Let's get things moving!" % human.name)
 
 people = [player,cpu1,cpu2,cpu3]
 
