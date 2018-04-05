@@ -41,6 +41,13 @@ class Card:
 		for card in group:
 			representation.append(Card.card_name(card))
 		return representation
+
+	@staticmethod
+	def added_value(group):
+		added_value = 0
+		for card in group:
+			added_value += Card.rank_value(card,1)
+		return added_value
 			
 
 class Deck:
