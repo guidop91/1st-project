@@ -162,6 +162,7 @@ class Player():
 		possible_cap = []
 		build_cap = []
 
+
 		#Make sure aces are included for single capture
 		for card in self.hand:
 			card_value = Card.rank_value(card,14)
@@ -193,6 +194,22 @@ class Player():
 					added_value += Card.rank_value(unit,1)
 				if card_value == added_value:
 					build_cap.append([group["Build"],card])
+
+		#Multicapture trial
+		multi_cap = []
+		for group1 in possible_cap:
+			result = set()
+			
+
+		visual1 = []
+		visual2 = []
+		for multi in multi_cap:
+			for group3 in multi:
+				visual1.append(Card.show_hand(group3))
+			visual2.append(visual1)
+		# print(visual2)
+
+		#####End of multicapture##########
 
 		if not self.is_pc:
 			i = 1
@@ -454,21 +471,22 @@ class Table():
 print("Get ready to play CASINOOOOOO! Make sure you have read and understood \n\
 the rules of the game.\n\n")
 
-human = Player(input("Enter your name here: "))
+# human = Player(input("Enter your name here: "))
 
 
-player = human
+player = Player("Human",True)
 cpu1 = Player("cpu1",True)
 cpu2 = Player("cpu2",True)
 cpu3 = Player("cpu3",True)
 
-print("Hi, %s! Let's get things moving!" % human.name)
+# print("Hi, %s! Let's get things moving!" % human.name)
 
 people = [player,cpu1,cpu2,cpu3]
+table1 = Table()
 
 def play_casino(player,cpu1,cpu2,cpu3,people):
 	
-	table1 = Table()
+	
 	deck1 = Deck()
 	table1.start_game(deck1)
 
@@ -490,7 +508,7 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 		elif total_score == 18:
 			for unit in team:
 				unit.eighteen_rest = True
-				if team.index(unit) == 0:
+				if team.index(unit) == 0: #Only print this once per team
 					print("Team %s gets a restriction for having 18 points." % team_names)
 		elif total_score == 19:
 			for unit in team:
@@ -506,7 +524,7 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 	log = []
 	while deck1.cards or player.hand or cpu1.hand or cpu2.hand or cpu3.hand:
 
-		if not player.hand:
+		if not people[0].hand:
 			for person in people:
 				deck1.deal_player(person)
 
@@ -573,10 +591,13 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 	while True:
 		if log[i] == "Capture":
 			people[i%4].pack.pack.extend(table1.in_game)
+			table1.in_game = []
 			print("%s was the last to capture, so gets all cards left in table.\n" % people[i%4].name)
 			break
 		else:
 			i -= 1
+
+	#Point reckoning
 
 	spades_qty_comp = []
 	sweep_comp = []
@@ -605,21 +626,24 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 	#Get points for sweeps. Player with min. sweeps reduces the other player sweeps.
 	sweeps_redux = min(sweep_comp)
 
+	print("SWEEPS")
 	if sweeps_redux >0:
-		print("Everyone's sweeps get reduced by %d, the least amount from the players.\n" % sweeps_redux)
+		print("Everyone's sweeps get reduced by %d, the least amount from the players." % sweeps_redux)
 
 	i = 0
 	while i<len(sweep_comp):
 		sweep_comp[i] -= sweeps_redux
 		i += 1
 
+	
+	pos = 0
 	for e in sweep_comp:
-		pos = 0
+		print("%s has %d sweeps." % (people[pos].name, e))
 		#If there's any restriction, no points are added.
 		if not people[pos].eighteen_rest and not people[pos].nineteen_rest and not people[pos].twenty_rest:
 			people[pos].points += e
 		pos += 1
-
+	print()
 
 
 	#Compare player's card quantities
@@ -664,7 +688,7 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 			person.pack = PlayerPack()
 		print("%s has %d points." % (team_names,total_score))
 
-	print("------------------------------\n")
+	print("----------------------------------------------\n")
 
 	#The firsts shall be the lasts
 	first = people[0]
