@@ -186,34 +186,28 @@ class Player():
 			for group in tab_combs:
 				if len(group) == 1:
 					continue
-				added_value = 0
-				for unit in group:
-					added_value += Card.rank_value(unit,1)
-				if card_value == added_value:
+				if card_value == Card.added_value(group):
 					possible_cap.append([group,card])
 
 		#For build capture.
 		for card in self.hand:
 			card_value = Card.rank_value(card,14)
 			for group in table.build:
-				added_value = 0
-				for unit in group["Build"]:
-					added_value += Card.rank_value(unit,1)
-				if card_value == added_value:
+				if card_value == Card.added_value(group["Build"]):
 					build_cap.append([group["Build"],card])
 
 		#Multicapture trial
-		multi_cap = []
-		for group1 in possible_cap:
-			result = set()
+		# multi_cap = []
+		# for group1 in possible_cap:
+		# 	result = set()
 			
 
-		visual1 = []
-		visual2 = []
-		for multi in multi_cap:
-			for group3 in multi:
-				visual1.append(Card.show_hand(group3))
-			visual2.append(visual1)
+		# visual1 = []
+		# visual2 = []
+		# for multi in multi_cap:
+		# 	for group3 in multi:
+		# 		visual1.append(Card.show_hand(group3))
+		# 	visual2.append(visual1)
 		# print(visual2)
 
 		#####End of multicapture##########
@@ -303,11 +297,8 @@ class Player():
 
 		for e in self.hand:
 			for group in combs:
-				build_sum = 0
 				if e not in group:
-					for unit in group:
-						build_sum += Card.rank_value(unit,1)
-					if build_sum == Card.rank_value(e,14):
+					if Card.added_value(group) == Card.rank_value(e,14):
 						if group not in possible_combs:
 							possible_combs.append([group,e])
 
