@@ -71,19 +71,58 @@ class Deck:
 		for i in range(0,4):
 			player.hand.append(self.draw_card())
 
-class Player():
+class PlayerPack():
+	def __init__(self):
+		self.pack = []
+		self.card_qty = 0
+		self.sweep = 0
+		self.aces = 0
+		self.spades = 0
+		self.has_ten_diamonds = False
+		self.has_two_spades = False
+
+	def aces_qty(self):
+		for card in self.pack:
+			if card.rank == "Ace":
+				self.aces += 1
+
+	def spades_qty(self):
+		for card in self.pack:
+			if card.suit == "Spades":
+				self.spades += 1
+
+	def own_ten_diamonds(self):
+		for card in self.pack:
+			if Card.card_name(card) == "10 of Diamonds":
+				self.has_ten_diamonds = True
+				break
+
+	def own_two_spades(self):
+		for card in self.pack:
+			if Card.card_name(card) == "2 of Spades":
+				self.has_two_spades = True
+				break
+
+	def get_score(self):
+		self.aces_qty()
+		self.spades_qty()
+		self.own_ten_diamonds()
+		self.own_two_spades()
+		self.card_qty = len(self.pack)
+
+class Player(PlayerPack):
 	
 	def __init__(self,name="",is_pc = False):
 
 		self.name = name
 		self.hand = []
 		self.points = 0
-		self.pack = PlayerPack()
 		self.is_pc = is_pc
 		#Point restrictions for winning
 		self.eighteen_rest = False
 		self.nineteen_rest = False
 		self.twenty_rest = False
+		PlayerPack.__init__(self)
 
 	def trail(self,table):
 		permission = True
@@ -196,22 +235,6 @@ class Player():
 				if card_value == Card.added_value(group["Build"]):
 					build_cap.append([group["Build"],card])
 
-		#Multicapture trial
-		# multi_cap = []
-		# for group1 in possible_cap:
-		# 	result = set()
-			
-
-		# visual1 = []
-		# visual2 = []
-		# for multi in multi_cap:
-		# 	for group3 in multi:
-		# 		visual1.append(Card.show_hand(group3))
-		# 	visual2.append(visual1)
-		# print(visual2)
-
-		#####End of multicapture##########
-
 		if not self.is_pc:
 			i = 1
 			for obj in possible_cap:
@@ -266,7 +289,7 @@ class Player():
 
 			if confirm.lower() == 'y':
 				for i in cap_obj[0]:
-					self.pack.pack.append(i)
+					self.pack.append(i)
 					if i in table.in_game:
 						table.in_game.remove(i)
 						continue
@@ -274,12 +297,12 @@ class Player():
 						if i in group["Build"]:
 							table.build.remove(group)
 
-				self.pack.pack.append(cap_obj[1])
+				self.pack.append(cap_obj[1])
 				self.hand.remove(cap_obj[1])
 
 				if not table.in_game and not table.build:
 					print("%s has sweeped the table!" % self.name)
-					self.pack.sweep += 1
+					self.sweep += 1
 			else:
 				continue
 
@@ -405,46 +428,6 @@ class Player():
 				result.append(list(value))
 
 		return result
-
-
-class PlayerPack():
-	def __init__(self):
-		self.pack = []
-		self.card_qty = 0
-		self.sweep = 0
-		self.aces = 0
-		self.spades = 0
-		self.has_ten_diamonds = False
-		self.has_two_spades = False
-
-	def aces_qty(self):
-		for card in self.pack:
-			if card.rank == "Ace":
-				self.aces += 1
-
-	def spades_qty(self):
-		for card in self.pack:
-			if card.suit == "Spades":
-				self.spades += 1
-
-	def own_ten_diamonds(self):
-		for card in self.pack:
-			if Card.card_name(card) == "10 of Diamonds":
-				self.has_ten_diamonds = True
-				break
-
-	def own_two_spades(self):
-		for card in self.pack:
-			if Card.card_name(card) == "2 of Spades":
-				self.has_two_spades = True
-				break
-
-	def get_score(self):
-		self.aces_qty()
-		self.spades_qty()
-		self.own_ten_diamonds()
-		self.own_two_spades()
-		self.card_qty = len(self.pack)
 
 
 class Table():
@@ -588,7 +571,7 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 	i = -1
 	while True:
 		if log[i] == "Capture":
-			people[i%4].pack.pack.extend(table1.in_game)
+			people[i%4].pack.extend(table1.in_game)
 			table1.in_game = []
 			print("%s was the last to capture, so gets all cards left in table.\n" % people[i%4].name)
 			break
@@ -603,23 +586,23 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 
 	for person in people:
 		if not person.eighteen_rest and not person.twenty_rest:
-			person.pack.get_score()
+			person.get_score()
 
-			if person.pack.has_two_spades:
+			if person.has_two_spades:
 				if not person.nineteen_rest:
 					person.points += 1
 					print("%s has the two of spades. He gets 1 point.\n" % person.name)
-			if person.pack.has_ten_diamonds:
+			if person.has_ten_diamonds:
 				person.points += 2
 				print("%s has the ten of diamonds. He gets 2 points.\n" % person.name)
-			if person.pack.aces:
+			if person.aces:
 				if not person.nineteen_rest:
-					person.points += person.pack.aces
-					print("%s gets %d points for his aces.\n" %(person.name,person.pack.aces))
+					person.points += person.aces
+					print("%s gets %d points for his aces.\n" %(person.name,person.aces))
 
-		spades_qty_comp.append(person.pack.spades)
-		sweep_comp.append(person.pack.sweep)
-		pack_qty_comp.append(person.pack.card_qty)
+		spades_qty_comp.append(person.spades)
+		sweep_comp.append(person.sweep)
+		pack_qty_comp.append(person.card_qty)
 
 	#Get points for sweeps. Player with min. sweeps reduces the other player sweeps.
 	sweeps_redux = min(sweep_comp)
@@ -683,7 +666,14 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 		for person in team:
 			total_score += person.points
 			team_names.append(person.name)
-			person.pack = PlayerPack()
+			person.pack = []
+			person.card_qty = 0
+			person.sweep = 0
+			person.aces = 0
+			person.spades = 0
+			person.has_ten_diamonds = False
+			person.has_two_spades = False
+
 		print("%s has %d points." % (team_names,total_score))
 
 	print("----------------------------------------------\n")
