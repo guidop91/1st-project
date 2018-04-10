@@ -14,21 +14,7 @@ class Card:
 		if isinstance(self.rank,int):
 			return self.rank
 		if self.rank == "Ace":
-			if acevalue:
-				value = acevalue
-			else:
-				while True:
-					try:
-						value = int(input("Would you like to have the Ace to be a 1 or a 14? "))
-					except ValueError:
-						print("Not a valid number.")
-						continue
-
-					if value != 14 and value !=1:
-						print("Must enter either 1 or 14")
-					else:
-						break
-			return value
+			return acevalue
 		else:
 			return ROYALTY[self.rank]
 
