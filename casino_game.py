@@ -315,7 +315,7 @@ class Player(PlayerPack):
 
 		if not self.is_pc:
 			print("You have entered the build function. If at any time you want to get out, enter 'q'.\n")
-		combs = self.all_comb(table)
+		combs = Table.all_comb(table,self)
 		possible_combs = []
 
 		for e in self.hand:
@@ -394,28 +394,6 @@ class Player(PlayerPack):
 				print("Build successfully made!")
 			break
 
-	def all_comb(self,table):
-		"""Gets all the possible combinations for one player card and all the table's cards"""
-		all_comb = []
-		for L in range(1,len(table.in_game)+1):
-			all_comb.append(itertools.combinations(table.in_game,L))
-
-		#The combination method returns an object that contains the possible combinations. 
-		#The object is iterable. It contains a list of tuples of those combinations.
-		result = []
-		for e in all_comb:
-			for value in e:
-				result.append(list(value))
-
-		result2 = []
-		for group in result:
-			for card in self.hand:
-				group.append(card)
-				result2.append(tuple(group)) #Make what I add to result2 unique and unalterable, so when 
-				group.remove(card)           #I remove it, the result2 is not affected.
-
-		return result2
-
 
 class Table():
 	def __init__(self):
@@ -440,6 +418,30 @@ class Table():
 				result.append(list(value))
 
 		return result
+
+	def all_comb(self,player):
+		"""Gets all the possible combinations for one player card and all the table's cards"""
+		all_comb = []
+		for L in range(1,len(self.in_game)+1):
+			all_comb.append(itertools.combinations(self.in_game,L))
+
+		#The combination method returns an object that contains the possible combinations. 
+		#The object is iterable. It contains a list of tuples of those combinations.
+		result = []
+		for e in all_comb:
+			for value in e:
+				result.append(list(value))
+
+		result2 = []
+		for group in result:
+			for card in player.hand:
+				group.append(card)
+				result2.append(tuple(group)) #Make what I add to result2 unique and unalterable, so when 
+				group.remove(card)           #I remove it, the result2 is not affected.
+
+		return result2
+
+
 
 
 
