@@ -9,32 +9,6 @@ class Card:
 		self.suit = suit
 		self.rank = rank
 
-	def rank_value(self,acevalue = None):
-		ROYALTY = {"Jack":11,"Queen":12,"King":13}
-		if isinstance(self.rank,int):
-			return self.rank
-		if self.rank == "Ace":
-			return acevalue
-		else:
-			return ROYALTY[self.rank]
-
-	def card_name(self):
-		return str(self.rank) + " of " + self.suit
-
-	@staticmethod
-	def show_hand(group):
-		representation = []
-		for card in group:
-			representation.append(Card.card_name(card))
-		return representation
-
-	@staticmethod
-	def added_value(group):
-		added_value = 0
-		for card in group:
-			added_value += Card.rank_value(card,1)
-		return added_value
-			
 
 class Deck:
 	def __init__(self):
@@ -79,13 +53,13 @@ class PlayerPack():
 
 	def own_ten_diamonds(self):
 		for card in self.pack:
-			if Card.card_name(card) == "10 of Diamonds":
+			if Player.card_name(card) == "10 of Diamonds":
 				self.has_ten_diamonds = True
 				break
 
 	def own_two_spades(self):
 		for card in self.pack:
-			if Card.card_name(card) == "2 of Spades":
+			if Player.card_name(card) == "2 of Spades":
 				self.has_two_spades = True
 				break
 
@@ -110,6 +84,35 @@ class Player(PlayerPack):
 		self.twenty_rest = False
 		PlayerPack.__init__(self)
 
+	@staticmethod
+	def rank_value(card,acevalue = None):
+		ROYALTY = {"Jack":11,"Queen":12,"King":13}
+		if isinstance(card.rank,int):
+			return card.rank
+		if card.rank == "Ace":
+			return acevalue
+		else:
+			return ROYALTY[card.rank]
+
+	@staticmethod
+	def added_value(group):
+		added_value = 0
+		for card in group:
+			added_value += Player.rank_value(card,1)
+		return added_value
+
+	@staticmethod
+	def show_hand(group):
+		representation = []
+		for card in group:
+			representation.append(Player.card_name(card))
+		return representation
+
+	@staticmethod
+	def card_name(card):
+		return str(card.rank) + " of " + card.suit
+
+
 	def trail(self,table):
 		permission = True
 		for group in table.build:
@@ -120,12 +123,10 @@ class Player(PlayerPack):
 		
 		for card1 in table.in_game:
 			for card2 in self.hand:
-				if Card.rank_value(card1,1) == Card.rank_value(card2,1):
+				if self.rank_value(card1,1) == self.rank_value(card2,1):
 					print("Cannot use trail function if a card in table is same value as a card in hand.")
 					permission = False
 					break
-		
-
 
 		while permission:
 
@@ -139,7 +140,7 @@ class Player(PlayerPack):
 					print("You can only choose one card.")
 					selection = 1
 				else:
-					print(Card.show_hand(self.hand))
+					print(self.show_hand(self.hand))
 					selection = input("Enter (1-%d) the card you want leave on the table: " % len(self.hand))
 					print("")
 
@@ -166,7 +167,7 @@ class Player(PlayerPack):
 
 			if not self.is_pc:
 
-				print("You have selected %s. " % Card.card_name(trail_card))
+				print("You have selected %s. " % self.card_name(trail_card))
 
 				selection2 = input("Are you sure? Enter \"y\" to proceed. ")
 
@@ -197,37 +198,37 @@ class Player(PlayerPack):
 
 		#Make sure aces are included for single capture
 		for card in self.hand:
-			card_value = Card.rank_value(card,14)
+			card_value = self.rank_value(card,14)
 			for group in tab_combs:
 				if len(group)>1:
 					continue
 				for unit in group:
-					if Card.rank_value(unit,14) == card_value:
+					if self.rank_value(unit,14) == card_value:
 						possible_cap.append([group,card])
 
 		#Only for captures of more than 1 card.
 		for card in self.hand:
-			card_value = Card.rank_value(card,14)
+			card_value = self.rank_value(card,14)
 			for group in tab_combs:
 				if len(group) == 1:
 					continue
-				if card_value == Card.added_value(group):
+				if card_value == self.added_value(group):
 					possible_cap.append([group,card])
 
 		#For build capture.
 		for card in self.hand:
-			card_value = Card.rank_value(card,14)
+			card_value = self.rank_value(card,14)
 			for group in table.build:
-				if card_value == Card.added_value(group["Build"]):
+				if card_value == self.added_value(group["Build"]):
 					build_cap.append([group["Build"],card])
 
 		if not self.is_pc:
 			i = 1
 			for obj in possible_cap:
-				print("Number %d: " % i, Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]))
+				print("Number %d: " % i, self.show_hand(obj[0]),"with " + self.card_name(obj[1]))
 				i += 1
 			for obj in build_cap:
-				print("Number %d: " % i, Card.show_hand(obj[0]),"with " + Card.card_name(obj[1]) + ". BUILD")
+				print("Number %d: " % i, self.show_hand(obj[0]),"with " + self.card_name(obj[1]) + ". BUILD")
 				i += 1
 
 		possible_cap.extend(build_cap)
@@ -266,7 +267,7 @@ class Player(PlayerPack):
 
 			if not self.is_pc:
 				print("You have selected: ")
-				print(Card.show_hand(cap_obj[0]),"with " + Card.card_name(cap_obj[1]))
+				print(self.show_hand(cap_obj[0]),"with " + self.card_name(cap_obj[1]))
 
 			if not self.is_pc:
 				confirm = input("Enter 'y' to confirm selection: ")
@@ -307,14 +308,14 @@ class Player(PlayerPack):
 		for e in self.hand:
 			for group in combs:
 				if e not in group:
-					if Card.added_value(group) == Card.rank_value(e,14):
+					if self.added_value(group) == self.rank_value(e,14):
 						if group not in possible_combs:
 							possible_combs.append([group,e])
 
 		if not self.is_pc:
 			no = 1
 			for i in possible_combs:
-				print("Number %d: " % no, Card.show_hand(i[0]),"with " + Card.card_name(i[1]))
+				print("Number %d: " % no, self.show_hand(i[0]),"with " + self.card_name(i[1]))
 				no += 1
 
 		while True:
@@ -352,7 +353,7 @@ class Player(PlayerPack):
 
 			if not self.is_pc:
 				print("You have selected: ")
-				print(Card.show_hand(sel_build[0]),"with " + Card.card_name(sel_build[1]))
+				print(self.show_hand(sel_build[0]),"with " + self.card_name(sel_build[1]))
 
 				confirm = input("Enter 'y' to confirm selection.")
 
@@ -499,11 +500,11 @@ def play_casino(player,cpu1,cpu2,cpu3,people):
 
 		
 		for person in people:
-			print("TABLE: ",Card.show_hand(table1.in_game))
+			print("TABLE: ",Player.show_hand(table1.in_game))
 			for group in table1.build:
-				print("BUILD: ",Card.show_hand(group["Build"]))
+				print("BUILD: ",Player.show_hand(group["Build"]))
 			if not person.is_pc:
-				print("Your hand: ", Card.show_hand(person.hand))
+				print("Your hand: ", Player.show_hand(person.hand))
 				for k,v in gameplay.items():
 					print("%s: %s" % (k,v))
 				while True:
