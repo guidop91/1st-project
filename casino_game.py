@@ -204,7 +204,7 @@ class Player(PlayerPack):
 	def capture(self,table):
 		if not self.is_pc:
 			print("You have entered the capture function. If at any time you want to get out, enter 'q'.\n")
-		tab_combs = self.all_comb2(table)
+		tab_combs = Table.all_comb2(table)
 		possible_cap = []
 		build_cap = []
 
@@ -416,19 +416,6 @@ class Player(PlayerPack):
 
 		return result2
 
-	def all_comb2(self,table):
-		"""Gets all the possible combinations for all the table's cards"""
-		all_comb = []
-		for L in range(1,len(table.in_game)+1):
-			all_comb.append(itertools.combinations(table.in_game,L))
-
-		result = []
-		for e in all_comb:
-			for value in e:
-				result.append(list(value))
-
-		return result
-
 
 class Table():
 	def __init__(self):
@@ -440,6 +427,19 @@ class Table():
 		#Draw initial cards for game start. 
 		for i in range(0,4):
 			self.in_game.append(deck.draw_card())
+
+	def all_comb2(self):
+		"""Gets all the possible combinations for all the table's cards"""
+		all_comb = []
+		for L in range(1,len(self.in_game)+1):
+			all_comb.append(itertools.combinations(self.in_game,L))
+
+		result = []
+		for e in all_comb:
+			for value in e:
+				result.append(list(value))
+
+		return result
 
 
 
